@@ -1,0 +1,4 @@
+Flask==0.10.1
+jenkinsapi==0.2.25
+nose
+pyyaml==3.11

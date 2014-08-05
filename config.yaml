@@ -1,0 +1,19 @@
+# API entry point
+jenkins: 'http://qa-s2:8080'
+repos:
+  # pull requests
+  - repo: Wikia/app
+    branches_not:
+    - dev
+    - master
+    jobs:
+    - unitTests_js_branches
+    - unitTests_php_branches
+  # pushes to dev
+  - repo: Wikia/app
+    branches:
+    - dev
+    jobs:
+    - jsIntegration_trunk
+    - jsUnit_trunkUnit
+    - phpUnit_trunkAllTests
