@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # Flash app that listens for GitHub web hooks
 # and triggers Jenkins jobs
-import jenkinsapi
 import jenkinsapi.jenkins as Jenkins
 import json
 import logging
@@ -13,14 +12,10 @@ app = Flask(__name__)
 
 from config import Config
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+# log to stderr
 logger = logging.getLogger('jenkins-webhooks')
-
-logger.info("JenkinsAPI v%s" % jenkinsapi.__version__)
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
 
 # read the config and setup Jenkins API
 cwd = os.path.dirname(os.path.abspath(__file__))
@@ -79,7 +74,7 @@ if __name__ == "__main__":
     try:
         port_number = int(sys.argv[1])
     except:
-        port_number = 80
+        port_number = 8088
 
     logger.info("Starting a Flask app on port %d" % port_number)
 

@@ -1,4 +1,9 @@
+import os
+import sys
 import unittest
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from config import Config
 
 
@@ -8,23 +13,23 @@ class ConfigTestClass(unittest.TestCase):
         self.repos = [
             {
                 'repo': 'foo/bar',
-                'branches': ['test', 'a-feature'],
-                'test': ['job1', 'job2']
+                'branches': ['tests', 'a-feature'],
+                'tests': ['job1', 'job2']
             },
             {
                 'repo': 'foo/bar',
-                'branches_not': ['test'],
-                'test': ['job3', 'job4']
+                'branches_not': ['tests'],
+                'tests': ['job3', 'job4']
             },
             {
-                'repo': 'foo/test',
-                'branches_not': ['test', 'a-feature'],
-                'test': ['job5']
+                'repo': 'foo/tests',
+                'branches_not': ['tests', 'a-feature'],
+                'tests': ['job5']
             },
             # match all pushes to foo/test2
             {
                 'repo': 'foo/test2',
-                'test': ['job5']
+                'tests': ['job5']
             }
         ]
 
@@ -40,7 +45,7 @@ class ConfigTestClass(unittest.TestCase):
         cases = [
             {
                 'repo': 'foo/bar',
-                'branch': 'test',
+                'branch': 'tests',
                 'index': 0
             },
             {
@@ -49,17 +54,17 @@ class ConfigTestClass(unittest.TestCase):
                 'index': 1
             },
             {
-                'repo': 'foo/test',
-                'branch': 'test',
+                'repo': 'foo/tests',
+                'branch': 'tests',
                 'index': None
             },
             {
                 'repo': 'foo/test2',
-                'branch': 'test',
+                'branch': 'tests',
                 'index': 3
             },
             {
-                'repo': 'foo/test',
+                'repo': 'foo/tests',
                 'branch': 'dev',
                 'index': 2
             }
@@ -77,7 +82,7 @@ class ConfigTestClass(unittest.TestCase):
         match = config.get_match(item['repo'], item['branch'])
         expected = item['index']
 
-        import json;  print json.dumps(item); print json.dumps(match); print ''
+        #import json;  print json.dumps(item); print json.dumps(match); print ''
 
         if expected is None:
             assert(match is None)
