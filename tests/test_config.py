@@ -82,8 +82,6 @@ class ConfigTestClass(unittest.TestCase):
         match = config.get_match(item['repo'], item['branch'])
         expected = item['index']
 
-        #import json;  print json.dumps(item); print json.dumps(match); print ''
-
         if expected is None:
             assert(match is None)
         else:

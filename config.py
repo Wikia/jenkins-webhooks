@@ -5,6 +5,7 @@ logger = logging.getLogger('jenkins-webhooks-config')
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
+
 class Config(object):
     def __init__(self, dict):
         assert('jenkins' in dict)
@@ -13,7 +14,7 @@ class Config(object):
         # Jenkins API entry point
         self.jenkins_host = dict['jenkins']
 
-        # repos defintions
+        # repos definitions
         self.repos = dict['repos']
 
     def get_jenkins_host(self):
@@ -49,12 +50,11 @@ class Config(object):
         return match
 
     @staticmethod
-    def from_yaml(file):
+    def from_yaml(file_name):
         """
         Creates an instance of Config class from given YAML file
         """
-        logger.info("Reading config from %s" % file)
+        logger.info("Reading config from %s" % file_name)
 
-        with open(file, 'r') as stream:
-            dict = yaml.load(stream)
-            return Config(dict)
+        with open(file_name, 'r') as stream:
+            return Config(yaml.load(stream))
