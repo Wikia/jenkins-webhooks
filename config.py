@@ -2,6 +2,8 @@ import logging
 import yaml
 
 logger = logging.getLogger('jenkins-webhooks-config')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
 
 class Config(object):
     def __init__(self, dict):

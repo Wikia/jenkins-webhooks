@@ -23,7 +23,7 @@ config = Config.from_yaml(cwd + '/config.yaml')
 jenkins = Jenkins.Jenkins(config.get_jenkins_host())
 
 
-@app.route("/", methods=['POST'])
+@app.route("/github-webhook/", methods=['POST'])
 def index():
     """
     Process web hook request from GitHub

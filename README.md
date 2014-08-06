@@ -18,5 +18,5 @@ py.test
 ```
 DEBUG=1 ./server
 
-curl -v "http://127.0.0.1:8088/" -d @examples/push.json -H "X-GitHub-Event: push" -H "Content-Type: application/json"
+curl -v "http://127.0.0.1:8088/github-webhook/" -d @examples/push.json -H "X-GitHub-Event: push" -H "Content-Type: application/json"
 ```
