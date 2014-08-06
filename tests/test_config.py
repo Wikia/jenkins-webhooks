@@ -8,7 +8,13 @@ from config import Config
 
 
 class ConfigTestClass(unittest.TestCase):
+    """
+    Unit tests for Config class
+    """
     def setUp(self):
+        """
+        Setup test cases
+        """
         self.hostname = 'http://example.com'
         self.repos = [
             {
@@ -34,14 +40,20 @@ class ConfigTestClass(unittest.TestCase):
         ]
 
     def test_jenkins_host(self):
+        """
+        Test config.get_jenkins_host method
+        """
         config = Config({
             'jenkins': self.hostname,
             'repos': []
         })
 
-        assert(config.get_jenkins_host() == self.hostname)
+        assert config.get_jenkins_host() == self.hostname
 
     def test_match(self):
+        """
+        Data provider for config.match method test
+        """
         cases = [
             {
                 'repo': 'foo/bar',
@@ -79,10 +91,13 @@ class ConfigTestClass(unittest.TestCase):
             self.check_match(config, item)
 
     def check_match(self, config, item):
+        """
+        Test config.match method
+        """
         match = config.get_match(item['repo'], item['branch'])
         expected = item['index']
 
         if expected is None:
-            assert(match is None)
+            assert match is None
         else:
-            assert(match is self.repos[expected])
+            assert match is self.repos[expected]

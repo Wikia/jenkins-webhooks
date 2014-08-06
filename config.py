@@ -7,15 +7,18 @@ logger.addHandler(logging.StreamHandler())
 
 
 class Config(object):
-    def __init__(self, dict):
-        assert('jenkins' in dict)
-        assert('repos' in dict)
+    """
+    A wrapper around YAML config file and rules matcher
+    """
+    def __init__(self, config):
+        assert 'jenkins' in config
+        assert 'repos' in config
 
         # Jenkins API entry point
-        self.jenkins_host = dict['jenkins']
+        self.jenkins_host = config['jenkins']
 
         # repos definitions
-        self.repos = dict['repos']
+        self.repos = config['repos']
 
     def get_jenkins_host(self):
         return self.jenkins_host
@@ -54,7 +57,7 @@ class Config(object):
         """
         Creates an instance of Config class from given YAML file
         """
-        logger.info("Reading config from %s" % file_name)
+        logger.info("Reading config from %s", file_name)
 
         with open(file_name, 'r') as stream:
             return Config(yaml.load(stream))

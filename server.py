@@ -45,14 +45,14 @@ def index():
         'commit': payload['head_commit']['id']
     }
 
-    logger.info("Push received: %s" % json.dumps(meta))
+    logger.info("Push received: %s", json.dumps(meta))
 
     # try to match the push with list of rules from the config file
     repo = '%s/%s' % (meta['owner'], meta['name'])
     match = config.get_match(repo, meta['branch'])
 
     if match is not None:
-        logger.info("Push matches: %s" % json.dumps(match))
+        logger.info("Push matches: %s", json.dumps(match))
 
         # run jobs
         job_params = {
@@ -63,7 +63,7 @@ def index():
 
         if 'jobs' in match:
             for job_name in match['jobs']:
-                logger.info("Running %s with params: %s" % (job_name, job_params))
+                logger.info("Running %s with params: %s", job_name, job_params)
                 jenkins.build_job(job_name, job_params)
     else:
         logger.info("No match found")
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     except:
         port_number = 8088
 
-    logger.info("Starting a Flask app on port %d" % port_number)
+    logger.info("Starting a Flask app on port %d", port_number)
 
     is_dev = os.environ.get('DEBUG', None) == '1'
     app.run(host='0.0.0.0', port=port_number, debug=is_dev)
