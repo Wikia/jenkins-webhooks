@@ -31,6 +31,5 @@ $ webhooks-server
 ```
 
 ```
-$ cd webhooks
-$ curl -v "http://127.0.0.1:8088/github-webhook/" -d @examples/push.json -H "X-GitHub-Event: push" -H "Content-Type: application/json"
+$ curl -v "http://127.0.0.1:8088/github-webhook/" -d @webhooks/examples/push.json -H "X-GitHub-Event: push" -H "Content-Type: application/json"
 ```

@@ -4,6 +4,7 @@
 import json
 import logging
 import os
+import sys
 from pkg_resources import resource_filename
 
 import jenkinsapi.jenkins as Jenkins
@@ -13,13 +14,15 @@ app = Flask(__name__)
 
 from .config import Config
 
+#logging.basicConfig(level=logging.DEBUG)  # for debug only
+
 # log to stderr
 logger = logging.getLogger('jenkins-webhooks')
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
 # read the config and setup Jenkins API
-config_file = resource_filename(__name__, 'config.yaml')
+config_file = resource_filename(__package__, 'config.yaml')
 config = Config.from_yaml(config_file)
 
 jenkins = Jenkins.Jenkins(config.get_jenkins_host())
