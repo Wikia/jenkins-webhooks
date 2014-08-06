@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 # Flash app that listens for GitHub web hooks
 # and triggers Jenkins jobs
-import jenkinsapi.jenkins as Jenkins
 import json
 import logging
 import os
-import sys
+from pkg_resources import resource_filename
 
+import jenkinsapi.jenkins as Jenkins
 from flask import Flask, request
+
 app = Flask(__name__)
 
-from config import Config
+from .config import Config
 
 # log to stderr
 logger = logging.getLogger('jenkins-webhooks')
@@ -18,8 +19,9 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
 # read the config and setup Jenkins API
-cwd = os.path.dirname(os.path.abspath(__file__))
-config = Config.from_yaml(cwd + '/config.yaml')
+config_file = resource_filename(__name__, 'config.yaml')
+config = Config.from_yaml(config_file)
+
 jenkins = Jenkins.Jenkins(config.get_jenkins_host())
 
 
