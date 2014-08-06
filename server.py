@@ -70,7 +70,11 @@ def index():
 
     return 'OK'
 
-if __name__ == "__main__":
+
+def run():
+    """
+    Initialize Flask app
+    """
     try:
         port_number = int(sys.argv[1])
     except:
@@ -80,3 +84,6 @@ if __name__ == "__main__":
 
     is_dev = os.environ.get('DEBUG', None) == '1'
     app.run(host='0.0.0.0', port=port_number, debug=is_dev)
+
+if __name__ == "__main__":
+    run()
