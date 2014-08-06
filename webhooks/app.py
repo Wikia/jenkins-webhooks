@@ -1,6 +1,7 @@
-#!/usr/bin/env python
-# Flash app that listens for GitHub web hooks
-# and triggers Jenkins jobs
+"""
+Flash app that listens for GitHub web hooks
+and triggers Jenkins jobs
+"""
 import json
 import logging
 import os
@@ -13,8 +14,6 @@ from flask import Flask, request
 app = Flask(__name__)
 
 from .config import Config
-
-#logging.basicConfig(level=logging.DEBUG)  # for debug only
 
 # log to stderr
 logger = logging.getLogger('jenkins-webhooks')
@@ -88,6 +87,9 @@ def run():
     logger.info("Starting a Flask app on port %d", port_number)
 
     is_dev = os.environ.get('DEBUG', None) == '1'
+    if is_dev:
+        logging.basicConfig(level=logging.DEBUG)
+
     app.run(host='0.0.0.0', port=port_number, debug=is_dev)
 
 if __name__ == "__main__":
