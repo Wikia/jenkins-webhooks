@@ -9,8 +9,8 @@ Flask app for triggering Jenkins builds by GitHub webhooks
 * run
 
 ```
-virtualenv venv
-source venv/bin/activate
+virtualenv env
+source env/bin/activate
 pip install -e .
 ```
 
@@ -27,7 +27,7 @@ py.test
 > The server listens on port 8088 by default
 
 ```
-$ webhooks-server
+$ ./env/bin/webhooks-server
 ```
 
 ```
