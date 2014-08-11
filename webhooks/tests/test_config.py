@@ -1,10 +1,6 @@
-import os
-import sys
 import unittest
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from config import Config
+from webhooks.config import Config
 
 
 class ConfigTestClass(unittest.TestCase):

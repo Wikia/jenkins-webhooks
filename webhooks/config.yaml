@@ -5,7 +5,6 @@ repos:
   - repo: Wikia/app
     branches_not:
     - dev
-    - master
     jobs:
     - unitTests_js_branches
     - unitTests_php_branches

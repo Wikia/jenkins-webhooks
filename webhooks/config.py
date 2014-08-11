@@ -1,9 +1,8 @@
+"""
+YAML config handler
+"""
 import logging
 import yaml
-
-logger = logging.getLogger('jenkins-webhooks-config')
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
 
 
 class Config(object):
@@ -21,6 +20,9 @@ class Config(object):
         self.repos = config['repos']
 
     def get_jenkins_host(self):
+        """
+        Returns Jenkins API entry point
+        """
         return self.jenkins_host
 
     def get_match(self, repo, branch):
@@ -57,6 +59,10 @@ class Config(object):
         """
         Creates an instance of Config class from given YAML file
         """
+        logger = logging.getLogger('jenkins-webhooks-config')
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(logging.StreamHandler())
+
         logger.info("Reading config from %s", file_name)
 
         with open(file_name, 'r') as stream:
