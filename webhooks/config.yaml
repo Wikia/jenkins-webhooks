@@ -15,4 +15,5 @@ repos:
     jobs:
     - jsIntegration_trunk
     - jsUnit_trunkUnit
-    - phpUnit_trunkAllTests
+    - phpUnit_trunkIntegration
+    - phpUnit_trunkUnit
