@@ -35,9 +35,9 @@ def index():
     event_type = request.headers.get('X-GitHub-Event')
     payload = request.get_json()
 
-    logger.info("Content-Type: %s", request.headers.get('Content-Type'))  # should be application/json
+    # logger.info("Content-Type: %s", request.headers.get('Content-Type'))  # should be application/json
     logger.info("GitHub event type: %s", event_type)
-    logger.info("JSON payload: %s", json.dumps(payload))
+    # logger.info("JSON payload: %s", json.dumps(payload))
 
     if event_type == "ping":
         return json.dumps({'msg': 'Hi!'})
