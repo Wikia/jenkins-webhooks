@@ -32,15 +32,20 @@ def index():
     """
     Process web hook request from GitHub
     """
-    if request.headers.get('X-GitHub-Event') == "ping":
+    event_type = request.headers.get('X-GitHub-Event')
+    payload = request.get_json()
+
+    logger.info("GitHub event type: %s", event_type)
+    logger.info("JSON payload: %s", json.dumps(payload))
+
+    if event_type == "ping":
         return json.dumps({'msg': 'Hi!'})
-    if request.headers.get('X-GitHub-Event') != "push":
+    if event_type != "push":
         return json.dumps({'msg': "wrong event type"})
 
     # decode the payload
     # @see examples/push.json
     # @see https://developer.github.com/v3/activity/events/types/#pushevent
-    payload = json.loads(request.data)
     meta = {
         'owner': payload['repository']['owner']['name'],
         'name': payload['repository']['name'],
@@ -86,7 +91,8 @@ def run():
 
     logger.info("Starting a Flask app on port %d", port_number)
 
-    is_dev = os.environ.get('DEBUG', None) == '1'
+    # is_dev = os.environ.get('DEBUG', None) == '1'
+    is_dev = True  # force debug mode
     if is_dev:
         logging.basicConfig(level=logging.DEBUG)
 
