@@ -52,6 +52,7 @@ def index():
         'name': payload['repository']['name'],
         'branch': payload['ref'].replace('refs/heads/', ''),
         'author': payload['head_commit']['author']['name'],
+        'email': payload['head_commit']['author']['email'],
         'commit': payload['head_commit']['id']
     }
 
@@ -68,7 +69,8 @@ def index():
         job_params = {
             'branch': meta['branch'],
             'commit': meta['commit'],
-            'author': meta['author']
+            'author': meta['author'],
+            'email': meta['email'],
         }
 
         if 'jobs' in match:
