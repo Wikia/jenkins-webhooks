@@ -1,13 +1,11 @@
 """
-Flash app that listens for GitHub web hooks
-and triggers Jenkins jobs
+Handler processing github events and triggers Jenkins jobs
 """
 import json
 import logging
-from pkg_resources import resource_filename
-
 import jenkinsapi.jenkins as Jenkins
 
+from pkg_resources import resource_filename
 from .config import Config
 
 # log to stderr
@@ -15,10 +13,10 @@ logger = logging.getLogger('jenkins-webhooks')
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
+
 class GithubEventHandler(object):
 
     def __init__(self, config, jenkins):
-
         self.__config = config
         self.__jenkins = jenkins
 
@@ -30,9 +28,10 @@ class GithubEventHandler(object):
         if self.__jenkins is None:
             self.__jenkins = Jenkins.Jenkins(config.get_jenkins_host())
 
-    def get_metadata(self, event_type, payload):
+    @staticmethod
+    def get_metadata(event_type, payload):
         # decode the payload
-        # @see examples/push.json
+        # @see examples/*.json
         # @see https://developer.github.com/v3/activity/events/types/#pushevent
         if event_type == "push":
             meta = {
@@ -62,7 +61,6 @@ class GithubEventHandler(object):
 
         return meta
 
-
     def process_github_event(self, event_type, payload):
         meta = self.get_metadata(event_type, payload)
         logger.info("Event received: %s", json.dumps(meta))
@@ -78,9 +76,9 @@ class GithubEventHandler(object):
                 'branch': meta['branch'],
                 'commit': meta['commit'],
             }
-            if meta.has_key('author'):
+            if 'author' in meta:
                 job_params['author'] = meta['author']
-            if meta.has_key('email'):
+            if 'email' in meta:
                 job_params['email'] = meta['email']
 
             if 'jobs' in match:
