@@ -19,6 +19,7 @@ setup(
         'jenkinsapi==0.2.25',
         'pytest==2.6.0',
         'pyyaml==3.11',
+        'mock==1.0.1'
     ],
     include_package_data=True,
     entry_points={

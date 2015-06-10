@@ -4,61 +4,12 @@ jenkins: 'http://qa-s2:8080'
 repos:
   # pull requests to dev
   - repo: Wikia/app
-    branches_not:
-    - dev
+    events:
+    - commit_comment
+    - issue_comment
+    - pull_request
+    - pull_request_review_comment
+    tags:
+    - '@WikiaSparrow'
     jobs:
     - unitTests_js_branches
-    - unitTests_php_branches
-  # pushes to dev
-  - repo: Wikia/app
-    branches:
-    - dev
-    jobs:
-    - jsIntegration_trunk
-    - jsUnit_trunkUnit
-    - phpUnit_trunkIntegration
-    - phpUnit_trunkUnit
-    - checkIncludes
-  # pushes to config@dev
-  - repo: Wikia/config
-    branches:
-    - dev
-    jobs:
-    - checkIncludes
-  # pushes to wikia-library-android@develop
-  - repo: Wikia/wikia-library-android
-    branches:
-    - develop
-    jobs:
-    - wikia-library-android
-  # pushes to single-wikia-android@develop
-  - repo: Wikia/single-wikia-android
-    branches:
-    - dev
-    jobs:
-    - wikia-swa-matrix-android-dev
-  # pushes to gameguides-android@develop
-  - repo: Wikia/gameguides-android
-    branches:
-    - develop
-    jobs:
-    - gameguides-android
-  # pushes to android-chat@develop
-  - repo: Wikia/android-chat
-    branches:
-    - develop
-    jobs:
-    - android-chat-library
-  # pushes to ios-codebase@develop
-  - repo: Wikia/ios-codebase
-    branches:
-    - develop
-    jobs:
-    - wikia-codebase-ios-sonar
-    - wikia-ca-matrix-ios
-  # pushes to mobile-apps-tools@develop
-  - repo: Wikia/mobile-apps-tools
-    branches:
-    - develop
-    jobs:
-    - mobile-apps-tools

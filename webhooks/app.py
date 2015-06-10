@@ -4,28 +4,20 @@ and triggers Jenkins jobs
 """
 import json
 import logging
-import os
 import sys
-from pkg_resources import resource_filename
 
-import jenkinsapi.jenkins as Jenkins
 from flask import Flask, request
+
+from .github_event_handler import GithubEventHandler
 
 app = Flask(__name__)
 
-from .config import Config
+github_event_handler = GithubEventHandler()
 
 # log to stderr
 logger = logging.getLogger('jenkins-webhooks')
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
-
-# read the config and setup Jenkins API
-config_file = resource_filename(__package__, 'config.yaml')
-config = Config.from_yaml(config_file)
-
-jenkins = Jenkins.Jenkins(config.get_jenkins_host())
-
 
 @app.route("/github-webhook/", methods=['POST'])
 def index():
@@ -41,46 +33,10 @@ def index():
 
     if event_type == "ping":
         return json.dumps({'msg': 'Hi!'})
-    if event_type != "push":
+    if event_type not in ("push", "pull_request", "pull_request_review_comment"):
         return json.dumps({'msg': "wrong event type"})
 
-    # decode the payload
-    # @see examples/push.json
-    # @see https://developer.github.com/v3/activity/events/types/#pushevent
-    meta = {
-        'owner': payload['repository']['owner']['name'],
-        'name': payload['repository']['name'],
-        'branch': payload['ref'].replace('refs/heads/', ''),
-        'author': payload['head_commit']['author']['name'],
-        'email': payload['head_commit']['author']['email'],
-        'commit': payload['head_commit']['id']
-    }
-
-    logger.info("Push received: %s", json.dumps(meta))
-
-    # try to match the push with list of rules from the config file
-    repo = '%s/%s' % (meta['owner'], meta['name'])
-    match = config.get_match(repo, meta['branch'])
-
-    if match is not None:
-        logger.info("Push matches: %s", json.dumps(match))
-
-        # run jobs
-        job_params = {
-            'branch': meta['branch'],
-            'commit': meta['commit'],
-            'author': meta['author'],
-            'email': meta['email'],
-        }
-
-        if 'jobs' in match:
-            for job_name in match['jobs']:
-                logger.info("Running %s with params: %s", job_name, job_params)
-                jenkins.build_job(job_name, job_params)
-    else:
-        logger.info("No match found")
-
-    return 'OK'
+    return github_event_handler.process_github_event(event_type, payload)
 
 
 def run():
