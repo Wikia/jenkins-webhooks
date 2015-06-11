@@ -16,7 +16,7 @@ logger.addHandler(logging.StreamHandler())
 
 class GithubEventHandler(object):
 
-    def __init__(self, config, jenkins):
+    def __init__(self, config=None, jenkins=None):
         self.__config = config
         self.__jenkins = jenkins
 
@@ -26,7 +26,7 @@ class GithubEventHandler(object):
             self.__config = Config.from_yaml(config_file)
 
         if self.__jenkins is None:
-            self.__jenkins = Jenkins.Jenkins(config.get_jenkins_host())
+            self.__jenkins = Jenkins.Jenkins(self.__config.get_jenkins_host())
 
     @staticmethod
     def get_metadata(event_type, payload):
