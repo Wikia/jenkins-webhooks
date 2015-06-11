@@ -25,9 +25,9 @@ class Config(object):
         """
         return self.jenkins_host
 
-    def get_match(self, repo, branch):
+    def get_match(self, repo, branch, event_type, comment):
         """
-        Returns a match for given repo / branch pair
+        Returns a match for given repo / branch pair / event_type / comment
         from repos collection
         """
         match = None
@@ -36,6 +36,21 @@ class Config(object):
             # match by repo name - FooInc/bar
             if repo != item['repo']:
                 continue
+
+            #if events specified check if supported
+            if 'events' in item and event_type not in item['events']:
+                continue
+
+            #if mentions specified, check if exists in the comments
+            if 'mentions' in item:
+                found = False
+                if comment is not None:
+                    for mentions in item['mentions']:
+                        if mentions in comment:
+                            found = True
+                            break
+                if not found:
+                    continue
 
             # match by branches
             if 'branches' in item:
