@@ -41,12 +41,12 @@ class Config(object):
             if 'events' in item and event_type not in item['events']:
                 continue
 
-            #if tags specified, check if exists in the comments
-            if 'tags' in item:
+            #if mentions specified, check if exists in the comments
+            if 'mentions' in item:
                 found = False
                 if comment is not None:
-                    for tag in item['tags']:
-                        if tag in comment:
+                    for mentions in item['mentions']:
+                        if mentions in comment:
                             found = True
                             break
                 if not found:

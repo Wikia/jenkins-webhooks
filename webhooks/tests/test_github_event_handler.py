@@ -21,7 +21,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 {
                     'repo': 'Wikia/sparrow',
                     'events': ['pull_request', 'pull_request_review_comment', 'push'],
-                    'tags': ['@WikiaSparrow'],
+                    'mentions': ['@WikiaSparrow'],
                     'jobs': ['job5']
                 },
                 {

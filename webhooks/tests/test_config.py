@@ -17,7 +17,7 @@ class ConfigTestClass(unittest.TestCase):
                 'repo': 'foo/bar',
                 'branches': ['tests', 'a-feature'],
                 'events': ['pull_request', 'pull_request_review_comment', 'push'],
-                'tags': ['@TestTag1', '@TestTag2'],
+                'mentions': ['@TestTag1', '@TestTag2'],
                 'jobs': ['job5']
             },
             {
