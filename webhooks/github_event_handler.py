@@ -3,7 +3,7 @@ Handler processing github events and triggers Jenkins jobs
 """
 import json
 import logging
-import jenkinsapi.jenkins as Jenkins
+import jenkinsapi.jenkins
 
 from pkg_resources import resource_filename
 from .config import Config
@@ -16,9 +16,9 @@ logger.addHandler(logging.StreamHandler())
 
 class GithubEventHandler(object):
 
-    def __init__(self, config=None, jenkins=None):
+    def __init__(self, config=None, jenkins_host=None):
         self.__config = config
-        self.__jenkins = jenkins
+        self.__jenkins = jenkins_host
 
         # read the config and setup Jenkins API
         if self.__config is None:
@@ -26,7 +26,7 @@ class GithubEventHandler(object):
             self.__config = Config.from_yaml(config_file)
 
         if self.__jenkins is None:
-            self.__jenkins = Jenkins.Jenkins(self.__config.get_jenkins_host())
+            self.__jenkins = jenkinsapi.jenkins.Jenkins(self.__config.get_jenkins_host())
 
     @staticmethod
     def get_metadata(event_type, payload):

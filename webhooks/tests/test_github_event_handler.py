@@ -39,8 +39,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
     def test_pull_request(self):
         jenkins_mock = mock.MagicMock()
         handler = GithubEventHandler(Config(self.config), jenkins_mock)
-        with self.__fixture('pull_request.json') as file:
-            payload = json.load(file)
+        with self.__fixture('pull_request.json') as fp:
+            payload = json.load(fp)
 
             handler.process_github_event('pull_request', payload)
             expected_params = {
@@ -52,8 +52,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
     def test_pull_request_review_comment(self):
         jenkins_mock = mock.MagicMock()
         handler = GithubEventHandler(Config(self.config), jenkins_mock)
-        with self.__fixture('pull_request_review_comment.json') as file:
-            payload = json.load(file)
+        with self.__fixture('pull_request_review_comment.json') as fp:
+            payload = json.load(fp)
 
             handler.process_github_event('pull_request_review_comment', payload)
             expected_params = {
@@ -65,8 +65,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
     def test_push(self):
         jenkins_mock = mock.MagicMock()
         handler = GithubEventHandler(Config(self.config), jenkins_mock)
-        with self.__fixture('push.json') as file:
-            payload = json.load(file)
+        with self.__fixture('push.json') as fp:
+            payload = json.load(fp)
 
             handler.process_github_event('push', payload)
             expected_params = {
