@@ -3,13 +3,11 @@
 jenkins: 'http://qa-s2:8080'
 repos:
   # pull requests to dev
-  - repo: Wikia/app
+  - repo: Wikia/sparrow
     events:
-    - commit_comment
-    - issue_comment
     - pull_request
     - pull_request_review_comment
     mentions:
     - '@WikiaSparrow'
     jobs:
-    - unitTests_js_branches
+    - sparrow_runner

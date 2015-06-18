@@ -46,7 +46,7 @@ def run():
     """
     try:
         port_number = int(sys.argv[1])
-    except ValueError:
+    except (IndexError, ValueError):
         port_number = 8088
 
     logger.info("Starting a Flask app on port %d", port_number)
