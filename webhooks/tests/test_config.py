@@ -94,14 +94,14 @@ class ConfigTestClass(unittest.TestCase):
                 'branch': 'tests',
                 'comment': "test @TestTag1",
                 'event_type': 'push',
-                'index': 0
+                'index': [0, 1]
             },
             {
                 'repo': 'foo/bar',
                 'branch': 'a-feature',
                 'comment': 'test @TestTag1',
                 'event_type': 'pull_request',
-                'index': 0
+                'index': [0, 2]
             },
             {
                 'repo': 'foo/bar',
@@ -124,10 +124,14 @@ class ConfigTestClass(unittest.TestCase):
         """
         Test config.match method
         """
-        match = config.get_match(item['repo'], item['branch'], item.get('event_type'), item.get('comment'))
+        matches = config.get_matches(item['repo'], item['branch'], item.get('event_type'), item.get('comment'))
         expected = item['index']
 
         if expected is None:
-            assert match is None
+            assert len(matches) == 0
         else:
-            assert match is self.repos[expected]
+            if type(expected) is int:
+                expected = [expected]
+            expected = set(expected)
+            actual = set([self.repos.index(match) for match in matches])
+            assert expected == actual

@@ -19,6 +19,7 @@ logger = logging.getLogger('jenkins-webhooks')
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
+
 @app.route("/github-webhook/", methods=['POST'])
 def index():
     """
@@ -45,7 +46,7 @@ def run():
     """
     try:
         port_number = int(sys.argv[1])
-    except:
+    except (IndexError, ValueError):
         port_number = 8088
 
     logger.info("Starting a Flask app on port %d", port_number)
@@ -56,6 +57,7 @@ def run():
         logging.basicConfig(level=logging.DEBUG)
 
     app.run(host='0.0.0.0', port=port_number, debug=is_dev)
+
 
 if __name__ == "__main__":
     run()
