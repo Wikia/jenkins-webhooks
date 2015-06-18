@@ -25,12 +25,11 @@ class Config(object):
         """
         return self.jenkins_host
 
-    def get_match(self, repo, branch, event_type, comment):
+    def get_matches(self, repo, branch, event_type, comment):
         """
-        Returns a match for given repo / branch pair / event_type / comment
-        from repos collection
+        Return list of matches for given: repo, branch, event_type, comment
         """
-        match = None
+        matches = []
 
         for item in self.repos:
             # match by repo name - FooInc/bar
@@ -52,22 +51,18 @@ class Config(object):
                 if not found:
                     continue
 
-            # match by branches
+            # match for branch
             if 'branches' in item:
-                if branch in item['branches']:
-                    match = item
-                    break
-
-            # does not match
+                if branch not in item['branches']:
+                    continue
+            # inverse match for branch
             elif 'branches_not' in item:
-                if branch not in item['branches_not']:
-                    match = item
-                    break
-            else:
-                match = item
-                break
+                if branch in item['branches_not']:
+                    continue
 
-        return match
+            matches.append(item)
+
+        return matches
 
     @staticmethod
     def from_yaml(file_name):

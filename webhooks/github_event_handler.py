@@ -33,6 +33,7 @@ class GithubEventHandler(object):
         # decode the payload
         # @see examples/*.json
         # @see https://developer.github.com/v3/activity/events/types/#pushevent
+        meta = {}
         if event_type == "push":
             meta = {
                 'owner': payload['repository']['owner'].get('name'),
@@ -48,7 +49,8 @@ class GithubEventHandler(object):
                 'repo_name': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
-                'comment': payload['pull_request']['body']
+                'comment': payload['pull_request']['body'],
+                'pull_num': payload['pull_request']['number'],
             }
         if event_type == "pull_request_review_comment":
             meta = {
@@ -56,30 +58,29 @@ class GithubEventHandler(object):
                 'repo_name': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
-                'comment': payload['comment']['body']
+                'comment': payload['comment']['body'],
+                'pull_num': payload['pull_request']['number'],
             }
 
         return meta
 
     def process_github_event(self, event_type, payload):
         meta = self.get_metadata(event_type, payload)
+        job_param_keys = 'branch commit author email pull_num'.split(' ')
+
         logger.info("Event received: %s", json.dumps(meta))
 
         # try to match the push with list of rules from the config file
-        match = self.__config.get_match(meta['repo_name'], meta['branch'], event_type, meta.get('comment'))
+        matches = self.__config.get_matches(meta['repo_name'], meta['branch'], event_type, meta.get('comment'))
 
-        if match is not None:
+        job_params = dict([
+            (k, v)
+            for k, v in meta.items()
+            if k in job_param_keys
+        ])
+
+        for match in matches:
             logger.info("Event matches: %s", json.dumps(match))
-
-            # run jobs
-            job_params = {
-                'branch': meta['branch'],
-                'commit': meta['commit'],
-            }
-            if 'author' in meta:
-                job_params['author'] = meta['author']
-            if 'email' in meta:
-                job_params['email'] = meta['email']
 
             if 'jobs' in match:
                 for job_name in match['jobs']:
