@@ -46,7 +46,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
             expected_params = {
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
-                'pull_num': 31}
+                'pull_num': 31
+            }
             jenkins_mock.build_job.assert_called_once_with('job5', expected_params)
 
     def test_pull_request_review_comment(self):
@@ -59,7 +60,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
             expected_params = {
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
-                'pull_num': 31}
+                'pull_num': 31
+            }
             jenkins_mock.build_job.assert_called_once_with('job5', expected_params)
 
     def test_push(self):
@@ -73,5 +75,6 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 'author': 'Kyle Daigle',
                 'branch': 'wikia-logger-backtrace-for-errors',
                 'commit': '4d2ab4e76d0d405d17d1a0f2b8a6071394e3ab40',
-                'email': 'kyle.daigle@github.com'}
+                'email': 'kyle.daigle@github.com'
+            }
             jenkins_mock.build_job.assert_called_once_with('job3', expected_params)
