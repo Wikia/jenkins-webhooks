@@ -44,6 +44,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
 
             handler.process_github_event('pull_request', payload)
             expected_params = {
+                'repo': 'Wikia/sparrow',
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
                 'pull_num': 31
@@ -58,6 +59,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
 
             handler.process_github_event('pull_request_review_comment', payload)
             expected_params = {
+                'repo': 'Wikia/sparrow',
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
                 'pull_num': 31
@@ -72,6 +74,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
 
             handler.process_github_event('push', payload)
             expected_params = {
+                'repo': 'Wikia/app',
                 'author': 'Kyle Daigle',
                 'branch': 'wikia-logger-backtrace-for-errors',
                 'commit': '4d2ab4e76d0d405d17d1a0f2b8a6071394e3ab40',

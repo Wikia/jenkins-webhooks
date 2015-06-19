@@ -37,7 +37,7 @@ class GithubEventHandler(object):
         if event_type == "push":
             meta = {
                 'owner': payload['repository']['owner'].get('name'),
-                'repo_name': payload['repository']['full_name'],
+                'repo': payload['repository']['full_name'],
                 'branch': payload['ref'].replace('refs/heads/', ''),
                 'author': payload['head_commit']['author']['name'],
                 'email': payload['head_commit']['author']['email'],
@@ -46,7 +46,7 @@ class GithubEventHandler(object):
         if event_type == "pull_request":
             meta = {
                 'owner': payload['repository']['owner'].get('name'),
-                'repo_name': payload['repository']['full_name'],
+                'repo': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
                 'comment': payload['pull_request']['body'],
@@ -55,7 +55,7 @@ class GithubEventHandler(object):
         if event_type == "pull_request_review_comment":
             meta = {
                 'owner': payload['repository']['owner'].get('name'),
-                'repo_name': payload['repository']['full_name'],
+                'repo': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
                 'comment': payload['comment']['body'],
@@ -66,12 +66,12 @@ class GithubEventHandler(object):
 
     def process_github_event(self, event_type, payload):
         meta = self.get_metadata(event_type, payload)
-        job_param_keys = 'branch commit author email pull_num'.split(' ')
+        job_param_keys = 'repo branch commit author email pull_num'.split(' ')
 
         logger.info("Event received: %s", json.dumps(meta))
 
         # try to match the push with list of rules from the config file
-        matches = self.__config.get_matches(meta['repo_name'], meta['branch'], event_type, meta.get('comment'))
+        matches = self.__config.get_matches(meta['repo'], meta['branch'], event_type, meta.get('comment'))
 
         job_params = dict([
             (k, v)
