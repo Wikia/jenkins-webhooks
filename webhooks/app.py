@@ -11,8 +11,12 @@ from flask import Flask, request
 from .github_event_handler import GithubEventHandler
 
 # set up the logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger('jenkins-webhooks')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 github_event_handler = GithubEventHandler()
@@ -31,16 +35,24 @@ def index():
     event_type = request.headers.get('X-GitHub-Event')
     payload = request.get_json()
 
-    # logger.info("Content-Type: %s", request.headers.get('Content-Type'))  # should be application/json
+    logger.debug("Content-Type: %s", request.headers.get('Content-Type'))  # should be application/json
+    logger.debug("JSON payload: %s", json.dumps(payload))
+
     logger.info("GitHub event type: %s", event_type)
-    # logger.info("JSON payload: %s", json.dumps(payload))
 
     if event_type == "ping":
         return json.dumps({'msg': 'Hi!'})
     if event_type not in ("push", "pull_request", "pull_request_review_comment"):
         return json.dumps({'msg': "wrong event type"})
 
-    return github_event_handler.process_github_event(event_type, payload)
+    try:
+        return github_event_handler.process_github_event(event_type, payload), 201  # HTTP Created
+    except Exception as e:
+        # catch "No match found" exception
+        # and UnknownJob exception from Jenkins API
+        # PLATFORM-736
+        logger.error('process_github_event() raised an exception', exc_info=e)
+        return json.dumps({'err_type': e.__class__.__name__, 'err_msg': e.message}), 404  # HTTP Not Found
 
 
 def run():

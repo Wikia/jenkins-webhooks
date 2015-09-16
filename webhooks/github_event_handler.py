@@ -83,7 +83,7 @@ class GithubEventHandler(object):
                 for job_name in match['jobs']:
                     self._logger.info("Running %s with params: %s", job_name, job_params)
                     self.__jenkins.build_job(job_name, job_params)
-        else:
-            self._logger.info("No match found")
+            else:
+                raise Exception("No match found")
 
         return 'OK'
