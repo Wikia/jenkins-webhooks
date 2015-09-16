@@ -3,7 +3,9 @@ Handler processing github events and triggers Jenkins jobs
 """
 import json
 import logging
+
 from jenkinsapi.jenkins import Jenkins
+from jenkinsapi.custom_exceptions import UnknownJob
 
 from pkg_resources import resource_filename
 from .config import Config
@@ -86,11 +88,14 @@ class GithubEventHandler(object):
             self._logger.info("Event matches: %s", json.dumps(match))
 
             if 'jobs' in match:
-                for job_name in match['jobs']:
-                    self._logger.info("Running %s with params: %s", job_name, job_params)
-                    self.__jenkins.build_job(job_name, job_params)
+                try:
+                    for job_name in match['jobs']:
+                        self._logger.info("Running %s with params: %s", job_name, job_params)
+                        self.__jenkins.build_job(job_name, job_params)
 
-                    jobs_started.append({'name': job_name, 'params': job_params})
+                        jobs_started.append({'name': job_name, 'params': job_params})
+                except UnknownJob as e:
+                    raise GithubEventException("Jenkins job was not found: {}".format(e.message))
             else:
                 raise GithubEventException("No match found")
 
