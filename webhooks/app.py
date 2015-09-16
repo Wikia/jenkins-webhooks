@@ -8,7 +8,7 @@ import sys
 
 # set up Flask app
 from flask import Flask, request
-from .github_event_handler import GithubEventHandler
+from .github_event_handler import GithubEventHandler, GithubEventException
 
 # set up the logging
 logging.basicConfig(
@@ -46,13 +46,20 @@ def index():
         return json.dumps({'msg': "wrong event type"})
 
     try:
-        return github_event_handler.process_github_event(event_type, payload), 201  # HTTP Created
-    except Exception as e:
-        # catch "No match found" exception
-        # and UnknownJob exception from Jenkins API
+        jobs_started = github_event_handler.process_github_event(event_type, payload)
+        return json.dumps({'jobs_started': jobs_started}), 201  # HTTP Created
+
+    except GithubEventException as e:
         # PLATFORM-736
+        #  catch "No match found" exception
+        # and UnknownJob exception from Jenkins API
         logger.error('process_github_event() raised an exception', exc_info=e)
-        return json.dumps({'err_type': e.__class__.__name__, 'err_msg': e.message}), 404  # HTTP Not Found
+        return json.dumps({'error': e.message}), 404  # HTTP Not Found
+
+    except Exception as e:
+        # generic exceptions handler
+        logger.error('process_github_event() raised an exception', exc_info=e)
+        return 'Internal Error', 500  # HTTP Internal Server Error
 
 
 def run():

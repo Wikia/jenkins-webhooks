@@ -9,6 +9,10 @@ from pkg_resources import resource_filename
 from .config import Config
 
 
+class GithubEventException(Exception):
+    pass
+
+
 class GithubEventHandler(object):
 
     def __init__(self, config=None, jenkins=None):
@@ -76,6 +80,8 @@ class GithubEventHandler(object):
             if k in job_param_keys
         ])
 
+        jobs_started = []
+
         for match in matches:
             self._logger.info("Event matches: %s", json.dumps(match))
 
@@ -83,7 +89,9 @@ class GithubEventHandler(object):
                 for job_name in match['jobs']:
                     self._logger.info("Running %s with params: %s", job_name, job_params)
                     self.__jenkins.build_job(job_name, job_params)
-            else:
-                raise Exception("No match found")
 
-        return 'OK'
+                    jobs_started.append({'name': job_name, 'params': job_params})
+            else:
+                raise GithubEventException("No match found")
+
+        return jobs_started
