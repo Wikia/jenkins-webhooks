@@ -6,18 +6,21 @@ import json
 import logging
 import sys
 
+# set up Flask app
 from flask import Flask, request
-
 from .github_event_handler import GithubEventHandler
 
-app = Flask(__name__)
+# set up the logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('jenkins-webhooks')
 
+app = Flask(__name__)
 github_event_handler = GithubEventHandler()
 
-# log to stderr
-logger = logging.getLogger('jenkins-webhooks')
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
+
+@app.route("/", methods=['GET'])
+def home_page():
+    return "Hi!"
 
 
 @app.route("/github-webhook/", methods=['POST'])
