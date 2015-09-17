@@ -3,15 +3,16 @@ Handler processing github events and triggers Jenkins jobs
 """
 import json
 import logging
+
 from jenkinsapi.jenkins import Jenkins
+from jenkinsapi.custom_exceptions import UnknownJob
 
 from pkg_resources import resource_filename
 from .config import Config
 
-# log to stderr
-logger = logging.getLogger('jenkins-webhooks')
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
+
+class GithubEventException(Exception):
+    pass
 
 
 class GithubEventHandler(object):
@@ -19,6 +20,8 @@ class GithubEventHandler(object):
     def __init__(self, config=None, jenkins=None):
         self.__config = config
         self.__jenkins = jenkins
+
+        self._logger = logging.getLogger(__name__)
 
         # read the config and setup Jenkins API
         if self.__config is None:
@@ -68,7 +71,7 @@ class GithubEventHandler(object):
         meta = self.get_metadata(event_type, payload)
         job_param_keys = 'repo branch commit author email pull_num'.split(' ')
 
-        logger.info("Event received: %s", json.dumps(meta))
+        self._logger.info("Event received: %s", json.dumps(meta))
 
         # try to match the push with list of rules from the config file
         matches = self.__config.get_matches(meta['repo'], meta['branch'], event_type, meta.get('comment'))
@@ -79,14 +82,21 @@ class GithubEventHandler(object):
             if k in job_param_keys
         ])
 
+        jobs_started = []
+
         for match in matches:
-            logger.info("Event matches: %s", json.dumps(match))
+            self._logger.info("Event matches: %s", json.dumps(match))
 
             if 'jobs' in match:
-                for job_name in match['jobs']:
-                    logger.info("Running %s with params: %s", job_name, job_params)
-                    self.__jenkins.build_job(job_name, job_params)
-        else:
-            logger.info("No match found")
+                try:
+                    for job_name in match['jobs']:
+                        self._logger.info("Running %s with params: %s", job_name, job_params)
+                        self.__jenkins.build_job(job_name, job_params)
 
-        return 'OK'
+                        jobs_started.append({'name': job_name, 'params': job_params})
+                except UnknownJob as e:
+                    raise GithubEventException("Jenkins job was not found: {}".format(e.message))
+            else:
+                raise GithubEventException("No match found")
+
+        return jobs_started

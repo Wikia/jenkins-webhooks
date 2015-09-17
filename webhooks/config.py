@@ -69,10 +69,7 @@ class Config(object):
         """
         Creates an instance of Config class from given YAML file
         """
-        logger = logging.getLogger('jenkins-webhooks-config')
-        logger.setLevel(logging.DEBUG)
-        logger.addHandler(logging.StreamHandler())
-
+        logger = logging.getLogger(__name__)
         logger.info("Reading config from %s", file_name)
 
         with open(file_name, 'r') as stream:
