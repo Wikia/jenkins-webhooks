@@ -3,6 +3,10 @@ jenkins-webhooks
 
 Flask app for triggering Jenkins builds by GitHub webhooks
 
+## Links
+
+* [Internal docs](https://one.wikia-inc.com/wiki/QA/Jenkins_for_pull_requests)
+
 ## Installation
 
 * clone the repository
