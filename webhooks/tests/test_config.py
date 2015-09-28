@@ -14,6 +14,7 @@ class ConfigTestClass(unittest.TestCase):
         self.hostname = 'http://example.com'
         self.repos = [
             {
+                # 0
                 'repo': 'foo/bar',
                 'branches': ['tests', 'a-feature'],
                 'events': ['pull_request', 'pull_request_review_comment', 'push'],
@@ -21,25 +22,44 @@ class ConfigTestClass(unittest.TestCase):
                 'jobs': ['job5']
             },
             {
+                # 1
                 'repo': 'foo/bar',
                 'branches': ['tests', 'a-feature'],
                 'events': ['push'],
                 'jobs': ['job1', 'job2']
             },
             {
+                # 2
                 'repo': 'foo/bar',
                 'branches_not': ['tests'],
                 'jobs': ['job3', 'job4']
             },
             {
+                # 3
                 'repo': 'foo/tests',
                 'branches_not': ['tests', 'a-feature'],
                 'jobs': ['job5']
             },
             # match all pushes to foo/test2
             {
+                # 4
                 'repo': 'foo/test2',
                 'jobs': ['job5']
+            },
+            {
+                # 5
+                'repo': 'foo/test3',
+                'events': ['pull_request'],
+                'mentions': ['@TestTag3'],
+                'jobs': ['job6a'],
+                'name': 'test3-mention'
+            },
+            {
+                # 6
+                'repo': 'foo/test3',
+                'events': ['pull_request'],
+                'jobs': ['job6b'],
+                'ifnot': 'test3-mention'
             }
         ]
 
@@ -109,6 +129,20 @@ class ConfigTestClass(unittest.TestCase):
                 'comment': 'test @NonExistent',
                 'event_type': 'pull_request',
                 'index': None
+            },
+            {
+                'repo': 'foo/test3',
+                'branch': 'master',
+                'comment': 'test @NonExistent',
+                'event_type': 'pull_request',
+                'index': 6
+            },
+            {
+                'repo': 'foo/test3',
+                'branch': 'master',
+                'comment': 'test @TestTag3',
+                'event_type': 'pull_request',
+                'index': 5
             }
         ]
 

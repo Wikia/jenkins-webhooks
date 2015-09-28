@@ -76,7 +76,7 @@ class GithubEventHandler(object):
         # try to match the push with list of rules from the config file
         matches = self.__config.get_matches(meta['repo'], meta['branch'], event_type, meta.get('comment'))
 
-        job_params = dict([
+        job_default_params = dict([
             (k, v)
             for k, v in meta.items()
             if k in job_param_keys
@@ -86,6 +86,10 @@ class GithubEventHandler(object):
 
         for match in matches:
             self._logger.info("Event matches: %s", json.dumps(match))
+
+            job_params = job_default_params.copy()
+            if 'job_params' in match:
+                job_params.update(match['job_params'])
 
             if 'jobs' in match:
                 try:

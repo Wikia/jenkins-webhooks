@@ -30,6 +30,14 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                     'events': ['push'],
                     'jobs': ['job3']
                 },
+                {
+                    'repo': 'Wikia/other',
+                    'events': ['pull_request'],
+                    'jobs': ['job4'],
+                    'job_params': {
+                        'silent': 'true'
+                    }
+                },
             ]
         }
 
@@ -81,3 +89,19 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 'email': 'kyle.daigle@github.com'
             }
             jenkins_mock.build_job.assert_called_once_with('job3', expected_params)
+
+    def test_extra_job_params(self):
+        jenkins_mock = mock.MagicMock()
+        handler = GithubEventHandler(Config(self.config), jenkins_mock)
+        with self.__fixture('pull_request_other_repo.json') as fp:
+            payload = json.load(fp)
+
+            handler.process_github_event('pull_request', payload)
+            expected_params = {
+                'repo': 'Wikia/other',
+                'branch': 'test-branch',
+                'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
+                'pull_num': 31,
+                'silent': 'true'
+            }
+            jenkins_mock.build_job.assert_called_once_with('job4', expected_params)
