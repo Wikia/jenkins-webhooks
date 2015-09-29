@@ -46,6 +46,7 @@ class ConfigTestClass(unittest.TestCase):
                 'repo': 'foo/test2',
                 'jobs': ['job5']
             },
+            # name/ifnot
             {
                 # 5
                 'repo': 'foo/test3',
@@ -60,7 +61,22 @@ class ConfigTestClass(unittest.TestCase):
                 'events': ['pull_request'],
                 'jobs': ['job6b'],
                 'ifnot': 'test3-mention'
-            }
+            },
+            # target_branches, target_branches_not
+            {
+                # 7
+                'repo': 'foo/test4',
+                'events': ['pull_request'],
+                'target_branches_not': ['dev'],
+                'jobs': ['job7a'],
+            },
+            {
+                # 8
+                'repo': 'foo/test4',
+                'events': ['pull_request'],
+                'target_branches': ['master'],
+                'jobs': ['job7b'],
+            },
         ]
 
     def test_jenkins_host(self):
@@ -82,36 +98,42 @@ class ConfigTestClass(unittest.TestCase):
             {
                 'repo': 'foo/bar',
                 'branch': 'tests',
+                'target_branch': 'tests',
                 'event_type': 'push',
                 'index': 1
             },
             {
                 'repo': 'foo/bar',
                 'branch': 'foo-feature',
+                'target_branch': 'foo-feature',
                 'event_type': 'push',
                 'index': 2
             },
             {
                 'repo': 'foo/tests',
                 'branch': 'tests',
+                'target_branch': 'tests',
                 'event_type': 'push',
                 'index': None
             },
             {
                 'repo': 'foo/test2',
                 'branch': 'tests',
+                'target_branch': 'tests',
                 'event_type': 'push',
                 'index': 4
             },
             {
                 'repo': 'foo/tests',
                 'branch': 'dev',
+                'target_branch': 'dev',
                 'event_type': 'push',
                 'index': 3
             },
             {
                 'repo': 'foo/bar',
                 'branch': 'tests',
+                'target_branch': 'tests',
                 'comment': "test @TestTag1",
                 'event_type': 'push',
                 'index': [0, 1]
@@ -119,6 +141,7 @@ class ConfigTestClass(unittest.TestCase):
             {
                 'repo': 'foo/bar',
                 'branch': 'a-feature',
+                'target_branch': 'dev',
                 'comment': 'test @TestTag1',
                 'event_type': 'pull_request',
                 'index': [0, 2]
@@ -126,24 +149,53 @@ class ConfigTestClass(unittest.TestCase):
             {
                 'repo': 'foo/bar',
                 'branch': 'tests',
+                'target_branch': 'dev',
                 'comment': 'test @NonExistent',
                 'event_type': 'pull_request',
                 'index': None
             },
+            # name/ifnot
             {
                 'repo': 'foo/test3',
-                'branch': 'master',
+                'branch': 'some-branch',
+                'target_branch': 'master',
                 'comment': 'test @NonExistent',
                 'event_type': 'pull_request',
                 'index': 6
             },
             {
                 'repo': 'foo/test3',
-                'branch': 'master',
+                'branch': 'some-branch',
+                'target_branch': 'master',
                 'comment': 'test @TestTag3',
                 'event_type': 'pull_request',
                 'index': 5
-            }
+            },
+            # target_branch
+            {
+                'repo': 'foo/test4',
+                'branch': 'a-feature',
+                'target_branch': 'dev',
+                'comment': 'test @TestTag3',
+                'event_type': 'pull_request',
+                'index': None
+            },
+            {
+                'repo': 'foo/test4',
+                'branch': 'a-feature',
+                'target_branch': 'master',
+                'comment': 'test @TestTag3',
+                'event_type': 'pull_request',
+                'index': [7, 8]
+            },
+            {
+                'repo': 'foo/test4',
+                'branch': 'a-feature',
+                'target_branch': 'release-001',
+                'comment': 'test @TestTag3',
+                'event_type': 'pull_request',
+                'index': 7
+            },
         ]
 
         config = Config({
@@ -158,7 +210,7 @@ class ConfigTestClass(unittest.TestCase):
         """
         Test config.match method
         """
-        matches = config.get_matches(item['repo'], item['branch'], item.get('event_type'), item.get('comment'))
+        matches = config.get_matches(item['repo'], item['branch'], item['target_branch'], item.get('event_type'), item.get('comment'))
         expected = item['index']
 
         if expected is None:

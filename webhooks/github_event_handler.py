@@ -42,6 +42,7 @@ class GithubEventHandler(object):
                 'owner': payload['repository']['owner'].get('name'),
                 'repo': payload['repository']['full_name'],
                 'branch': payload['ref'].replace('refs/heads/', ''),
+                'target_branch': '',
                 'author': payload['head_commit']['author']['name'],
                 'email': payload['head_commit']['author']['email'],
                 'commit': payload['head_commit']['id']
@@ -52,6 +53,7 @@ class GithubEventHandler(object):
                 'repo': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
+                'target_branch': payload['pull_request']['base']['ref'],
                 'comment': payload['pull_request']['body'],
                 'pull_num': payload['pull_request']['number'],
             }
@@ -61,6 +63,7 @@ class GithubEventHandler(object):
                 'repo': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
+                'target_branch': payload['pull_request']['base']['ref'],
                 'comment': payload['comment']['body'],
                 'pull_num': payload['pull_request']['number'],
             }
@@ -74,7 +77,7 @@ class GithubEventHandler(object):
         self._logger.info("Event received: %s", json.dumps(meta))
 
         # try to match the push with list of rules from the config file
-        matches = self.__config.get_matches(meta['repo'], meta['branch'], event_type, meta.get('comment'))
+        matches = self.__config.get_matches(meta['repo'], meta['branch'], meta['target_branch'], event_type, meta.get('comment'))
 
         job_default_params = dict([
             (k, v)
