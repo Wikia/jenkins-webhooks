@@ -25,7 +25,7 @@ class Config(object):
         """
         return self.jenkins_host
 
-    def get_matches(self, repo, branch, event_type, comment):
+    def get_matches(self, repo, branch, target_branch, event_type, comment):
         """
         Return list of matches for given: repo, branch, event_type, comment
         """
@@ -59,6 +59,15 @@ class Config(object):
             # inverse match for branch
             elif 'branches_not' in item:
                 if branch in item['branches_not']:
+                    continue
+
+            # match for target_branch
+            if 'target_branches' in item:
+                if target_branch not in item['target_branches']:
+                    continue
+            # inverse match for target_branch
+            elif 'target_branches_not' in item:
+                if target_branch in item['target_branches_not']:
                     continue
 
             if 'ifnot' in item and item['ifnot'] in scheduled:
