@@ -54,11 +54,13 @@ def index():
         #  catch "No match found" exception
         # and UnknownJob exception from Jenkins API
         logger.error('process_github_event() raised an exception', exc_info=e)
+        logger.error('request data: \nevent-type:\n{}\npayload:\n{}'.format(event_type, json.dumps(payload)))
         return json.dumps({'error': e.message}), 404  # HTTP Not Found
 
     except Exception as e:
         # generic exceptions handler
         logger.error('process_github_event() raised an exception', exc_info=e)
+        logger.error('request data: \nevent-type:\n{}\npayload:\n{}'.format(event_type, json.dumps(payload)))
         return 'Internal Error', 500  # HTTP Internal Server Error
 
 
