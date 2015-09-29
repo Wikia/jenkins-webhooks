@@ -30,6 +30,7 @@ class Config(object):
         Return list of matches for given: repo, branch, event_type, comment
         """
         matches = []
+        scheduled = set()
 
         for item in self.repos:
             # match by repo name - FooInc/bar
@@ -59,6 +60,12 @@ class Config(object):
             elif 'branches_not' in item:
                 if branch in item['branches_not']:
                     continue
+
+            if 'ifnot' in item and item['ifnot'] in scheduled:
+                continue
+
+            if 'name' in item:
+                scheduled.add(item['name'])
 
             matches.append(item)
 
