@@ -5,7 +5,7 @@ import json
 import logging
 
 from jenkinsapi.jenkins import Jenkins
-from jenkinsapi.custom_exceptions import UnknownJob
+from jenkinsapi.custom_exceptions import UnknownJob, WillNotBuild
 
 from pkg_resources import resource_filename
 from .config import Config
@@ -71,6 +71,10 @@ class GithubEventHandler(object):
         return meta
 
     def process_github_event(self, event_type, payload):
+        # delete branch events are missing crucial information, skip throwing an error in such cases
+        if payload.get('deleted') is True:
+            return 0
+
         meta = self.get_metadata(event_type, payload)
         job_param_keys = 'repo branch commit author email pull_num'.split(' ')
 
@@ -102,7 +106,11 @@ class GithubEventHandler(object):
 
                         jobs_started.append({'name': job_name, 'params': job_params})
                 except UnknownJob as e:
+                    self._logger.info("Jenkins job was not found", exc_info=True)
                     raise GithubEventException("Jenkins job was not found: {}".format(e.message))
+                except WillNotBuild as e:
+                    self._logger.info("Jenkins refused to queue a job: {}".format(e.message), exc_info=True)
+                    pass
             else:
                 raise GithubEventException("No match found")
 
