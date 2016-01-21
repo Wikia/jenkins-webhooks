@@ -2,6 +2,7 @@
 YAML config handler
 """
 import logging
+import re
 import yaml
 
 
@@ -24,6 +25,26 @@ class Config(object):
         Returns Jenkins API entry point
         """
         return self.jenkins_host
+
+    def glob_list(self, l):
+        """
+        Returns a compiled regex from a list of glob-like patterns (supports * and ?)
+        """
+        def glob_item_re(item):
+            if '*' not in item and '?' not in item:
+                return re.escape(item)
+            return ''.join([
+                '.*' if c == '*' else
+                '.' if c == '?' else
+                re.escape(c)
+                for c in item
+            ])
+        pat = ''.join([
+            '^(',
+            '|'.join([glob_item_re(item) for item in l]),
+            ')$',
+        ])
+        return re.compile(pat)
 
     def get_matches(self, repo, branch, target_branch, event_type, comment):
         """
@@ -54,20 +75,20 @@ class Config(object):
 
             # match for branch
             if 'branches' in item:
-                if branch not in item['branches']:
+                if not self.glob_list(item['branches']).match(branch):
                     continue
             # inverse match for branch
             elif 'branches_not' in item:
-                if branch in item['branches_not']:
+                if self.glob_list(item['branches_not']).match(branch):
                     continue
 
             # match for target_branch
             if 'target_branches' in item:
-                if target_branch not in item['target_branches']:
+                if not self.glob_list(item['target_branches']).match(target_branch):
                     continue
             # inverse match for target_branch
             elif 'target_branches_not' in item:
-                if target_branch in item['target_branches_not']:
+                if self.glob_list(item['target_branches_not']).match(target_branch):
                     continue
 
             if 'ifnot' in item and item['ifnot'] in scheduled:
