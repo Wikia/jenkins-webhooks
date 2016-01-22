@@ -77,6 +77,43 @@ class ConfigTestClass(unittest.TestCase):
                 'target_branches': ['master'],
                 'jobs': ['job7b'],
             },
+            # glob patterns for branch names matching
+            {
+                # 9
+                'repo': 'foo/test5',
+                'events': ['push'],
+                'branches': ['glob*'],
+                'jobs': ['job9']
+            },
+            {
+                # 10
+                'repo': 'foo/test5',
+                'events': ['push'],
+                'branches_not': ['*xglob'],
+                'jobs': ['job10']
+            },
+            {
+                # 11
+                'repo': 'foo/test5',
+                'events': ['push'],
+                'target_branches': ['tglob*'],
+                'jobs': ['job11']
+            },
+            {
+                # 12
+                'repo': 'foo/test5',
+                'events': ['push'],
+                'target_branches_not': ['*yglob'],
+                'jobs': ['job12']
+            },
+            {
+                # 13
+                'repo': 'foo/test6',
+                'events': ['push'],
+                'branches': ['exact?'],
+                'target_branches': ['exact?'],
+                'jobs': ['job13']
+            },
         ]
 
     def test_jenkins_host(self):
@@ -196,6 +233,49 @@ class ConfigTestClass(unittest.TestCase):
                 'event_type': 'pull_request',
                 'index': 7
             },
+            # glob patterns
+            {
+                'repo': 'foo/test5',
+                'branch': 'glob123xglob',
+                'target_branch': 'yglob',
+                'event_type': 'push',
+                'index': 9
+            },
+            {
+                'repo': 'foo/test5',
+                'branch': 'glob123sglob',
+                'target_branch': 'yglob',
+                'event_type': 'push',
+                'index': [ 9, 10 ]
+            },
+            {
+                'repo': 'foo/test5',
+                'branch': 'xglob',
+                'target_branch': 'tglob123yglob',
+                'event_type': 'push',
+                'index': 11
+            },
+            {
+                'repo': 'foo/test5',
+                'branch': 'xglob',
+                'target_branch': 'tglob123sglob',
+                'event_type': 'push',
+                'index': [ 11, 12 ]
+            },
+            {
+                'repo': 'foo/test6',
+                'branch': 'exact1',
+                'target_branch': 'exact2',
+                'event_type': 'push',
+                'index': 13
+            },
+            {
+                'repo': 'foo/test6',
+                'branch': 'exact11',
+                'target_branch': 'exact22',
+                'event_type': 'push',
+                'index': None
+            },
         ]
 
         config = Config({
@@ -212,12 +292,11 @@ class ConfigTestClass(unittest.TestCase):
         """
         matches = config.get_matches(item['repo'], item['branch'], item['target_branch'], item.get('event_type'), item.get('comment'))
         expected = item['index']
-
         if expected is None:
-            assert len(matches) == 0
-        else:
-            if type(expected) is int:
-                expected = [expected]
-            expected = set(expected)
-            actual = set([self.repos.index(match) for match in matches])
-            assert expected == actual
+            expected = []
+        if type(expected) is int:
+            expected = [expected]
+        expected = set(expected)
+
+        actual = set([self.repos.index(match) for match in matches])
+        assert expected == actual, '{} != {} :: {}'.format(expected,actual,item)
