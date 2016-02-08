@@ -24,7 +24,6 @@ class Config(object):
         self.jenkins_user = config['user']
         self.jenkins_pass = config['pass']
 
-
     def get_jenkins_host(self):
         """
         Returns Jenkins API entry point
