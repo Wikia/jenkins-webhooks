@@ -18,15 +18,15 @@ class Config(object):
         self.repos = config['repos']
 
         # Jenkins API entry point and credentials
-        self.jenkins_host = config['jenkins']['host']
+        self.jenkins_url = config['jenkins']['url']
         self.jenkins_user = config['jenkins']['user']
         self.jenkins_pass = config['jenkins']['pass']
 
-    def get_jenkins_host(self):
+    def get_jenkins_url(self):
         """
         Returns Jenkins API entry point
         """
-        return self.jenkins_host
+        return self.jenkins_url
 
     def get_jenkins_user(self):
         """

@@ -125,7 +125,7 @@ class ConfigTestClass(unittest.TestCase):
             'repos': []
         })
 
-        assert config.get_jenkins_host() == self.hostname
+        assert config.get_jenkins_url() == self.hostname
 
     def test_match(self):
         """
