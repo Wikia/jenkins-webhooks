@@ -20,11 +20,28 @@ class Config(object):
         # repos definitions
         self.repos = config['repos']
 
+        # jenkins credentials for authentication
+        self.jenkins_user = config['user']
+        self.jenkins_pass = config['pass']
+
+
     def get_jenkins_host(self):
         """
         Returns Jenkins API entry point
         """
         return self.jenkins_host
+
+    def get_jenkins_user(self):
+        """
+        Returns Jenkins API entry point
+        """
+        return self.jenkins_user
+
+    def get_jenkins_pass(self):
+        """
+        Returns Jenkins API entry point
+        """
+        return self.jenkins_pass
 
     def glob_list(self, l):
         """
