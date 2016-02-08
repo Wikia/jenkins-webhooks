@@ -14,15 +14,13 @@ class Config(object):
         assert 'jenkins' in config
         assert 'repos' in config
 
-        # Jenkins API entry point
-        self.jenkins_host = config['jenkins']
-
         # repos definitions
         self.repos = config['repos']
 
-        # jenkins credentials for authentication
-        self.jenkins_user = config['user']
-        self.jenkins_pass = config['pass']
+        # Jenkins API entry point and credentials
+        self.jenkins_host = config['jenkins']['host']
+        self.jenkins_user = config['jenkins']['user']
+        self.jenkins_pass = config['jenkins']['pass']
 
     def get_jenkins_host(self):
         """
