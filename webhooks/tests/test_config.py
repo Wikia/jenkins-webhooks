@@ -121,7 +121,10 @@ class ConfigTestClass(unittest.TestCase):
         Test config.get_jenkins_host method
         """
         config = Config({
-            'jenkins': self.hostname,
+            'jenkins': {
+                'url': self.hostname,
+                'user': 'dummy',
+                'pass': 'dummy_pass'},
             'repos': []
         })
 
