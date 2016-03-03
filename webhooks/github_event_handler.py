@@ -5,7 +5,7 @@ import json
 import logging
 
 from jenkinsapi.jenkins import Jenkins
-from jenkinsapi.custom_exceptions import UnknownJob, WillNotBuild
+from jenkinsapi.custom_exceptions import JenkinsAPIException, NotFound
 
 from pkg_resources import resource_filename
 from .config import Config
@@ -102,16 +102,15 @@ class GithubEventHandler(object):
                 try:
                     for job_name in match['jobs']:
                         self._logger.info("Running %s with params: %s", job_name, job_params)
-                        res = self.__jenkins.build_job(job_name, job_params)
+                        self.__jenkins.build_job(job_name, job_params)
 
-                        self._logger.info("Run of %s job scheduled, response from Jenkins: %s",
-                                          job_name, json.dumps(res))
+                        self._logger.info("Run of %s job scheduled", job_name)
 
                         jobs_started.append({'name': job_name, 'params': job_params})
-                except UnknownJob as e:
+                except NotFound as e:
                     self._logger.info("Jenkins job was not found", exc_info=True)
                     raise GithubEventException("Jenkins job was not found: {}".format(e.message))
-                except WillNotBuild as e:
+                except JenkinsAPIException as e:
                     self._logger.info("Jenkins refused to queue a job: {}".format(e.message), exc_info=True)
                     pass
             else:
