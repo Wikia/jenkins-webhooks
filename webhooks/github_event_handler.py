@@ -5,7 +5,7 @@ import json
 import logging
 
 from jenkinsapi.jenkins import Jenkins
-from jenkinsapi.custom_exceptions import UnknownJob, WillNotBuild
+from jenkinsapi.custom_exceptions import JenkinsAPIException, NotFound
 
 from pkg_resources import resource_filename
 from .config import Config
@@ -29,7 +29,12 @@ class GithubEventHandler(object):
             self.__config = Config.from_yaml(config_file)
 
         if self.__jenkins is None:
-            self.__jenkins = Jenkins(self.__config.get_jenkins_url(), self.__config.get_jenkins_user(), self.__config.get_jenkins_pass())
+            self.__jenkins = Jenkins(
+                baseurl=self.__config.get_jenkins_url(),
+                username=self.__config.get_jenkins_user(),
+                password=self.__config.get_jenkins_pass(),
+                lazy=True
+            )
 
     @staticmethod
     def get_metadata(event_type, payload):
@@ -102,18 +107,15 @@ class GithubEventHandler(object):
                 try:
                     for job_name in match['jobs']:
                         self._logger.info("Running %s with params: %s", job_name, job_params)
-                        self.__jenkins[job_name].invoke(
-                            build_params=job_params,
-                            invoke_pre_check_delay=0
-                        )
+                        self.__jenkins.build_job(job_name, job_params)
 
                         self._logger.info("Run of %s job scheduled", job_name)
 
                         jobs_started.append({'name': job_name, 'params': job_params})
-                except UnknownJob as e:
+                except NotFound as e:
                     self._logger.info("Jenkins job was not found", exc_info=True)
                     raise GithubEventException("Jenkins job was not found: {}".format(e.message))
-                except WillNotBuild as e:
+                except JenkinsAPIException as e:
                     self._logger.info("Jenkins refused to queue a job: {}".format(e.message), exc_info=True)
                     pass
             else:
