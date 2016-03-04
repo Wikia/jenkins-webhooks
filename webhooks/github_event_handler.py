@@ -9,6 +9,7 @@ from jenkinsapi.custom_exceptions import JenkinsAPIException, NotFound
 
 from pkg_resources import resource_filename
 from .config import Config
+from .requestor import PersistentRequester
 
 
 class GithubEventException(Exception):
@@ -29,11 +30,17 @@ class GithubEventHandler(object):
             self.__config = Config.from_yaml(config_file)
 
         if self.__jenkins is None:
+            requester = PersistentRequester(
+                self.__config.get_jenkins_user(),
+                self.__config.get_jenkins_pass(),
+                baseurl=self.__config.get_jenkins_url(),
+            )
+
             self.__jenkins = Jenkins(
                 baseurl=self.__config.get_jenkins_url(),
                 username=self.__config.get_jenkins_user(),
                 password=self.__config.get_jenkins_pass(),
-                lazy=True
+                requester=requester
             )
 
     @staticmethod
