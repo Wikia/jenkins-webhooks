@@ -20,7 +20,9 @@ setup(
         'pytest==2.6.0',
         'pyyaml==3.11',
         'mock==1.0.1',
-        'gunicorn==19.4.5'
+        'gunicorn==19.4.5',
+        'gevent==1.0.2',
+        'greenlet==0.4.9'
     ],
     include_package_data=True,
     entry_points={
