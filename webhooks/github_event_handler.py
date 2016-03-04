@@ -29,7 +29,12 @@ class GithubEventHandler(object):
             self.__config = Config.from_yaml(config_file)
 
         if self.__jenkins is None:
-            self.__jenkins = Jenkins(self.__config.get_jenkins_url(), self.__config.get_jenkins_user(), self.__config.get_jenkins_pass())
+            self.__jenkins = Jenkins(
+                baseurl=self.__config.get_jenkins_url(),
+                username=self.__config.get_jenkins_user(),
+                password=self.__config.get_jenkins_pass(),
+                lazy=True
+            )
 
     @staticmethod
     def get_metadata(event_type, payload):
