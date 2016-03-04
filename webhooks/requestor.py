@@ -4,6 +4,7 @@ Jenkins API does not use persistent HTTP connections feature of request Python m
 THis class extends jenkinsapi.utils.requester.Requester class and uses requests.Session()
 """
 
+import logging
 import requests
 
 from jenkinsapi.utils.requester import Requester
@@ -27,7 +28,10 @@ class PersistentRequester(Requester):
             params=params,
             headers=headers,
             allow_redirects=allow_redirects)
-        return self.request.get(self._update_url_scheme(url), **requestKwargs)
+        resp = self.request.get(self._update_url_scheme(url), **requestKwargs)
+
+        logging.info('get_url <{}>: {} ({})'.format(url, resp, resp.text))
+        return resp
 
     def post_url(self, url, params=None, data=None, files=None,
                  headers=None, allow_redirects=True):
@@ -37,4 +41,7 @@ class PersistentRequester(Requester):
             files=files,
             headers=headers,
             allow_redirects=allow_redirects)
-        return self.request.post(self._update_url_scheme(url), **requestKwargs)
+        resp = self.request.post(self._update_url_scheme(url), **requestKwargs)
+
+        logging.info('post_url <{}>: {} ({})'.format(url, resp, resp.text))
+        return resp
