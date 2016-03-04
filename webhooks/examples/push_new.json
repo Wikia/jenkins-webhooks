@@ -1,0 +1,261 @@
+{
+  "ref": "refs/heads/SUS-123-wiki-hooks",
+  "before": "8eda50e5ab0022c19710583c12b2bb7c45471128",
+  "after": "0c3a2cf0aa7ac56e5b7b6a8a5fd6276dbe094be9",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/Wikia/app/compare/8eda50e5ab00...0c3a2cf0aa7a",
+  "commits": [
+    {
+      "id": "9ac2140b9da817a175967489e59b916d5d28a5ae",
+      "distinct": false,
+      "message": "SUS-281 Handle retrieve responses with status MoreDataAvailable",
+      "timestamp": "2016-03-04T11:55:17+01:00",
+      "url": "https://github.com/Wikia/app/commit/9ac2140b9da817a175967489e59b916d5d28a5ae",
+      "author": {
+        "name": "Szymon Fraszczak",
+        "email": "fraszczak.szymon+github@gmail.com",
+        "username": "fraszczakszymon"
+      },
+      "committer": {
+        "name": "Szymon Fraszczak",
+        "email": "fraszczak.szymon+github@gmail.com",
+        "username": "fraszczakszymon"
+      },
+      "added": [
+
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "extensions/wikia/ExactTargetUpdates/client/ExactTargetClient.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/BaseAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/UserEditsAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/UserEmailAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/UserIdsAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/WikiCategoriesAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/maintenance/ExactTargetUpdateUserEditsPerWikiMaintenance.php",
+        "extensions/wikia/ExactTargetUpdates/tasks/ExactTargetUserUpdateDriver.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserEditsAdapterTest.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserEmailAdapterTest.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserIdsAdapterTest.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/WikiCategoriesAdapterTest.php"
+      ]
+    },
+    {
+      "id": "573900d87c975f6d8af8d93f8c065852dabe7e6d",
+      "distinct": false,
+      "message": "SUS-281 Restrict array results type in BaseAdapter",
+      "timestamp": "2016-03-04T12:03:29+01:00",
+      "url": "https://github.com/Wikia/app/commit/573900d87c975f6d8af8d93f8c065852dabe7e6d",
+      "author": {
+        "name": "Szymon Fraszczak",
+        "email": "fraszczak.szymon+github@gmail.com",
+        "username": "fraszczakszymon"
+      },
+      "committer": {
+        "name": "Szymon Fraszczak",
+        "email": "fraszczak.szymon+github@gmail.com",
+        "username": "fraszczakszymon"
+      },
+      "added": [
+
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "extensions/wikia/ExactTargetUpdates/client/adapters/BaseAdapter.class.php"
+      ]
+    },
+    {
+      "id": "0c3a2cf0aa7ac56e5b7b6a8a5fd6276dbe094be9",
+      "distinct": true,
+      "message": "Merge pull request #9884 from Wikia/SUS-281-et-handle-big-requests\n\nSUS-281 Handle retrieve responses with status MoreDataAvailable",
+      "timestamp": "2016-03-04T13:00:40+01:00",
+      "url": "https://github.com/Wikia/app/commit/0c3a2cf0aa7ac56e5b7b6a8a5fd6276dbe094be9",
+      "author": {
+        "name": "Mix",
+        "email": "mix@wikia.com",
+        "username": "mixth-sense"
+      },
+      "committer": {
+        "name": "Mix",
+        "email": "mix@wikia.com",
+        "username": "mixth-sense"
+      },
+      "added": [
+
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "extensions/wikia/ExactTargetUpdates/client/ExactTargetClient.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/BaseAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/UserEditsAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/UserEmailAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/UserIdsAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/client/adapters/WikiCategoriesAdapter.class.php",
+        "extensions/wikia/ExactTargetUpdates/maintenance/ExactTargetUpdateUserEditsPerWikiMaintenance.php",
+        "extensions/wikia/ExactTargetUpdates/tasks/ExactTargetUserUpdateDriver.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserEditsAdapterTest.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserEmailAdapterTest.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserIdsAdapterTest.php",
+        "extensions/wikia/ExactTargetUpdates/tests/client/adapters/WikiCategoriesAdapterTest.php"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "0c3a2cf0aa7ac56e5b7b6a8a5fd6276dbe094be9",
+    "distinct": true,
+    "message": "Merge pull request #9884 from Wikia/SUS-281-et-handle-big-requests\n\nSUS-281 Handle retrieve responses with status MoreDataAvailable",
+    "timestamp": "2016-03-04T13:00:40+01:00",
+    "url": "https://github.com/Wikia/app/commit/0c3a2cf0aa7ac56e5b7b6a8a5fd6276dbe094be9",
+    "author": {
+      "name": "Mix",
+      "email": "mix@wikia.com",
+      "username": "mixth-sense"
+    },
+    "committer": {
+      "name": "Mix",
+      "email": "mix@wikia.com",
+      "username": "mixth-sense"
+    },
+    "added": [
+
+    ],
+    "removed": [
+
+    ],
+    "modified": [
+      "extensions/wikia/ExactTargetUpdates/client/ExactTargetClient.class.php",
+      "extensions/wikia/ExactTargetUpdates/client/adapters/BaseAdapter.class.php",
+      "extensions/wikia/ExactTargetUpdates/client/adapters/UserEditsAdapter.class.php",
+      "extensions/wikia/ExactTargetUpdates/client/adapters/UserEmailAdapter.class.php",
+      "extensions/wikia/ExactTargetUpdates/client/adapters/UserIdsAdapter.class.php",
+      "extensions/wikia/ExactTargetUpdates/client/adapters/WikiCategoriesAdapter.class.php",
+      "extensions/wikia/ExactTargetUpdates/maintenance/ExactTargetUpdateUserEditsPerWikiMaintenance.php",
+      "extensions/wikia/ExactTargetUpdates/tasks/ExactTargetUserUpdateDriver.php",
+      "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserEditsAdapterTest.php",
+      "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserEmailAdapterTest.php",
+      "extensions/wikia/ExactTargetUpdates/tests/client/adapters/UserIdsAdapterTest.php",
+      "extensions/wikia/ExactTargetUpdates/tests/client/adapters/WikiCategoriesAdapterTest.php"
+    ]
+  },
+  "repository": {
+    "id": 5532313,
+    "name": "app",
+    "full_name": "Wikia/app",
+    "owner": {
+      "name": "Wikia",
+      "email": "github@wikia-inc.com"
+    },
+    "private": false,
+    "html_url": "https://github.com/Wikia/app",
+    "description": "Wikia Application Code",
+    "fork": false,
+    "url": "https://github.com/Wikia/app",
+    "forks_url": "https://api.github.com/repos/Wikia/app/forks",
+    "keys_url": "https://api.github.com/repos/Wikia/app/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/Wikia/app/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/Wikia/app/teams",
+    "hooks_url": "https://api.github.com/repos/Wikia/app/hooks",
+    "issue_events_url": "https://api.github.com/repos/Wikia/app/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/Wikia/app/events",
+    "assignees_url": "https://api.github.com/repos/Wikia/app/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/Wikia/app/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/Wikia/app/tags",
+    "blobs_url": "https://api.github.com/repos/Wikia/app/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/Wikia/app/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/Wikia/app/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/Wikia/app/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/Wikia/app/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/Wikia/app/languages",
+    "stargazers_url": "https://api.github.com/repos/Wikia/app/stargazers",
+    "contributors_url": "https://api.github.com/repos/Wikia/app/contributors",
+    "subscribers_url": "https://api.github.com/repos/Wikia/app/subscribers",
+    "subscription_url": "https://api.github.com/repos/Wikia/app/subscription",
+    "commits_url": "https://api.github.com/repos/Wikia/app/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/Wikia/app/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/Wikia/app/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/Wikia/app/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/Wikia/app/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/Wikia/app/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/Wikia/app/merges",
+    "archive_url": "https://api.github.com/repos/Wikia/app/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/Wikia/app/downloads",
+    "issues_url": "https://api.github.com/repos/Wikia/app/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/Wikia/app/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/Wikia/app/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/Wikia/app/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/Wikia/app/labels{/name}",
+    "releases_url": "https://api.github.com/repos/Wikia/app/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/Wikia/app/deployments",
+    "created_at": 1345755358,
+    "updated_at": "2016-02-10T06:38:01Z",
+    "pushed_at": 1457092841,
+    "git_url": "git://github.com/Wikia/app.git",
+    "ssh_url": "git@github.com:Wikia/app.git",
+    "clone_url": "https://github.com/Wikia/app.git",
+    "svn_url": "https://github.com/Wikia/app",
+    "homepage": "http://dev.wikia.com",
+    "size": 668612,
+    "stargazers_count": 98,
+    "watchers_count": 98,
+    "language": "PHP",
+    "has_issues": false,
+    "has_downloads": true,
+    "has_wiki": false,
+    "has_pages": false,
+    "forks_count": 74,
+    "mirror_url": null,
+    "open_issues_count": 87,
+    "forks": 74,
+    "open_issues": 87,
+    "watchers": 98,
+    "default_branch": "dev",
+    "stargazers": 98,
+    "master_branch": "dev",
+    "organization": "Wikia"
+  },
+  "pusher": {
+    "name": "mixth-sense",
+    "email": "mix@wikia.com"
+  },
+  "organization": {
+    "login": "Wikia",
+    "id": 1171011,
+    "url": "https://api.github.com/orgs/Wikia",
+    "repos_url": "https://api.github.com/orgs/Wikia/repos",
+    "events_url": "https://api.github.com/orgs/Wikia/events",
+    "hooks_url": "https://api.github.com/orgs/Wikia/hooks",
+    "issues_url": "https://api.github.com/orgs/Wikia/issues",
+    "members_url": "https://api.github.com/orgs/Wikia/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/Wikia/public_members{/member}",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1171011?v=3",
+    "description": null
+  },
+  "sender": {
+    "login": "mixth-sense",
+    "id": 16726,
+    "avatar_url": "https://avatars.githubusercontent.com/u/16726?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/mixth-sense",
+    "html_url": "https://github.com/mixth-sense",
+    "followers_url": "https://api.github.com/users/mixth-sense/followers",
+    "following_url": "https://api.github.com/users/mixth-sense/following{/other_user}",
+    "gists_url": "https://api.github.com/users/mixth-sense/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/mixth-sense/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/mixth-sense/subscriptions",
+    "organizations_url": "https://api.github.com/users/mixth-sense/orgs",
+    "repos_url": "https://api.github.com/users/mixth-sense/repos",
+    "events_url": "https://api.github.com/users/mixth-sense/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/mixth-sense/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}
