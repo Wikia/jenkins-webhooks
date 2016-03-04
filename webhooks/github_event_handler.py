@@ -114,10 +114,8 @@ class GithubEventHandler(object):
                 try:
                     for job_name in match['jobs']:
                         self._logger.info("Running %s with params: %s", job_name, job_params)
-                        self.__jenkins[job_name].invoke(
-                            build_params=job_params,
-                            invoke_pre_check_delay=0
-                        )
+                        self.__jenkins.build_job(job_name, job_params)
+
                         self._logger.info("Run of %s job scheduled", job_name)
 
                         jobs_started.append({'name': job_name, 'params': job_params})

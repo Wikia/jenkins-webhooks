@@ -22,10 +22,19 @@ class PersistentRequester(Requester):
 
         return self._request
 
-    def get_url(self, url, params=None, headers=None):
-        requestKwargs = self.get_request_dict(params=params, headers=headers)
+    def get_url(self, url, params=None, headers=None, allow_redirects=True):
+        requestKwargs = self.get_request_dict(
+            params=params,
+            headers=headers,
+            allow_redirects=allow_redirects)
         return self.request.get(self._update_url_scheme(url), **requestKwargs)
 
-    def post_url(self, url, params=None, data=None, files=None, headers=None):
-        requestKwargs = self.get_request_dict(params=params, data=data, files=files, headers=headers)
+    def post_url(self, url, params=None, data=None, files=None,
+                 headers=None, allow_redirects=True):
+        requestKwargs = self.get_request_dict(
+            params=params,
+            data=data,
+            files=files,
+            headers=headers,
+            allow_redirects=allow_redirects)
         return self.request.post(self._update_url_scheme(url), **requestKwargs)
