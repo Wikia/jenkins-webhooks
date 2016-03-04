@@ -30,7 +30,7 @@ class PersistentRequester(Requester):
             allow_redirects=allow_redirects)
         resp = self.request.get(self._update_url_scheme(url), **requestKwargs)
 
-        logging.info('get_url <{}>: {} (redirect: {})'.format(url, resp, resp.headers.get('location')))
+        logging.debug('get_url <{}>: {} (redirect: {})'.format(url, resp, resp.headers.get('location')))
         return resp
 
     def post_url(self, url, params=None, data=None, files=None,
@@ -43,5 +43,5 @@ class PersistentRequester(Requester):
             allow_redirects=allow_redirects)
         resp = self.request.post(self._update_url_scheme(url), **requestKwargs)
 
-        logging.info('post_url <{}>: {} (redirect: {})'.format(url, resp, resp.headers.get('location')))
+        logging.debug('post_url <{}>: {} (redirect: {})'.format(url, resp, resp.headers.get('location')))
         return resp
