@@ -96,7 +96,7 @@ class GithubEventHandler(object):
         matches = self.__config.get_matches(meta['repo'], meta['branch'], meta['target_branch'], event_type, meta.get('comment'))
 
         job_default_params = dict([
-            (k, v.encode('utf-8'))
+            (k, v.encode('utf-8') if isinstance(v, basestring) else v)
             for k, v in meta.items()
             if k in job_param_keys
         ])
