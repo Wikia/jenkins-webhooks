@@ -114,7 +114,10 @@ class GithubEventHandler(object):
                 try:
                     for job_name in match['jobs']:
                         self._logger.info("Running %s with params: %s", job_name, job_params)
-                        self.__jenkins.build_job(job_name, job_params)
+
+                        # prevent "BadParams: This job does not support parameters"
+                        job = self.__jenkins.jobs[job_name]
+                        self.__jenkins.build_job(job_name, job_params if job.has_params() else None)
 
                         self._logger.info("Run of %s job scheduled", job_name)
 
