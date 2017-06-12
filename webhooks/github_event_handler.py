@@ -57,7 +57,8 @@ class GithubEventHandler(object):
                 'target_branch': '',
                 'author': payload['head_commit']['author']['name'],
                 'email': payload['head_commit']['author']['email'],
-                'commit': payload['head_commit']['id']
+                'commit': payload['head_commit']['id'],
+                'pull_num': payload['pull_request']['number'],
             }
         if event_type == "pull_request":
             meta = {
