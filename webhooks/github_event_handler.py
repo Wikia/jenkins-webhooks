@@ -66,8 +66,10 @@ class GithubEventHandler(object):
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
                 'target_branch': payload['pull_request']['base']['ref'],
+                'state': payload['pull_request']['state'],
                 'comment': payload['pull_request']['body'],
                 'pull_num': payload['pull_request']['number'],
+                'merged': payload['pull_request']['merged'],
             }
         if event_type == "pull_request_review_comment":
             meta = {
@@ -82,18 +84,34 @@ class GithubEventHandler(object):
 
         return meta
 
-    def process_github_event(self, event_type, payload):
+    def get_wrapped_event_type(self, github_event_type, metadata):
+        # Wrap github events and make it our own
+        wrapped_event_type = github_event_type
+        wrapped_event_matched = False
+
+        if github_event_type is 'pull_request' and metadata['state'] is 'closed' and metadata['merged'] is 'true':
+            wrapped_event_matched = True
+            wrapped_event_type = 'pull_request_merged'
+
+        if wrapped_event_matched:
+            self._logger.info("Wrapped event matched: %s", wrapped_event_type)
+        return wrapped_event_type
+
+    def process_github_event(self, github_event_type, payload):
         # delete branch events are missing crucial information, skip throwing an error in such cases
         if payload.get('deleted') is True:
             return 0
 
-        meta = self.get_metadata(event_type, payload)
+        meta = self.get_metadata(github_event_type, payload)
+
         job_param_keys = 'repo branch commit author email pull_num'.split(' ')
 
         self._logger.info("Event received: %s", json.dumps(meta))
 
+        wrapped_event_type = self.get_wrapped_event_type(github_event_type, meta)
+
         # try to match the push with list of rules from the config file
-        matches = self.__config.get_matches(meta['repo'], meta['branch'], meta['target_branch'], event_type, meta.get('comment'))
+        matches = self.__config.get_matches(meta['repo'], meta['branch'], meta['target_branch'], wrapped_event_type, meta.get('comment'))
 
         job_default_params = dict([
             (k, v.encode('utf-8') if isinstance(v, basestring) else v)

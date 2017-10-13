@@ -43,7 +43,7 @@ def index():
     if event_type == "ping":
         return json.dumps({'msg': 'Hi!'})
     if event_type not in ("push", "pull_request", "pull_request_review_comment"):
-        return json.dumps({'msg': "wrong event type"})
+        return json.dumps({'msg': "wrong GitHub event type"})
 
     try:
         jobs_started = github_event_handler.process_github_event(event_type, payload)
