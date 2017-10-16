@@ -85,11 +85,11 @@ class GithubEventHandler(object):
         return meta
 
     def get_wrapped_event_type(self, github_event_type, metadata):
-        # Wrap github events and make it our own
+        # Wrap Github events and make it our own
         wrapped_event_type = github_event_type
         wrapped_event_matched = False
 
-        if github_event_type == 'pull_request' and metadata['state'] == 'closed' and metadata['merged'] == 'true':
+        if github_event_type == 'pull_request' and metadata['state'] == 'closed' and metadata['merged'] is True:
             wrapped_event_matched = True
             wrapped_event_type = 'pull_request_merged'
 
