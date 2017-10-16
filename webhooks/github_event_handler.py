@@ -89,7 +89,7 @@ class GithubEventHandler(object):
         wrapped_event_type = github_event_type
         wrapped_event_matched = False
 
-        if github_event_type is 'pull_request' and metadata['state'] is 'closed' and metadata['merged'] is 'true':
+        if github_event_type == 'pull_request' and metadata['state'] == 'closed' and metadata['merged'] == 'true':
             wrapped_event_matched = True
             wrapped_event_type = 'pull_request_merged'
 
