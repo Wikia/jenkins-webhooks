@@ -16,7 +16,7 @@ setup(
     packages=['webhooks'],
     install_requires=[
         'Flask==0.10.1',
-        'jenkinsapi==0.2.29',
+        'jenkinsapi==0.3.6',
         'pytest==2.6.0',
         'pyyaml==3.11',
         'mock==1.0.1',
