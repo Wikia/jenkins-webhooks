@@ -46,7 +46,7 @@ class GithubEventHandler(object):
     @staticmethod
     def get_labels(pull_request):
         if 'labels' in pull_request:
-            return list(map((lambda label: label['name']), pull_request['labels']))
+            return ','.join(list(map((lambda label: str(label['name'])), pull_request['labels'])))
 
         return []
 

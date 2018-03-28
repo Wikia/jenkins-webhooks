@@ -93,8 +93,9 @@ class Config(object):
             if 'labels' in item:
                 found = False
                 if metadata['labels'] is not None:
+                    labels = metadata['labels'].split(',')
                     for label in item['labels']:
-                        if label in metadata['labels']:
+                        if label in labels:
                             found = True
                             break
                 if not found:

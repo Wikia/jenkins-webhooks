@@ -54,6 +54,13 @@
         "name": "Major change",
         "color": "fbca04",
         "default": false
+      },
+      {
+        "id": 1,
+        "url": "https://api.github.com/repos/Wikia/ad-engine/labels/Foo",
+        "name": "Foo",
+        "color": "fbca04",
+        "default": false
       }
     ],
     "milestone": null,
