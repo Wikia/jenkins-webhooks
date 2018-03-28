@@ -111,7 +111,7 @@ class GithubEventHandler(object):
 
         meta = self.get_metadata(github_event_type, payload)
 
-        job_param_keys = 'repo branch commit author email pull_num'.split(' ')
+        job_param_keys = 'repo branch commit author email pull_num labels'.split(' ')
 
         self._logger.info("Event received: %s", json.dumps(meta))
 
