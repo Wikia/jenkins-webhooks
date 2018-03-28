@@ -60,16 +60,18 @@ class Config(object):
         ])
         return re.compile(pat)
 
-    def get_matches(self, repo, branch, target_branch, event_type, comment):
+    def get_matches(self, event_type, metadata):
         """
         Return list of matches for given: repo, branch, event_type, comment
         """
         matches = []
+        branch = metadata['branch']
+        target_branch = metadata['target_branch']
         scheduled = set()
 
         for item in self.repos:
             # match by repo name - FooInc/bar
-            if repo != item['repo']:
+            if metadata['repo'] != item['repo']:
                 continue
 
             #if events specified check if supported
@@ -79,9 +81,20 @@ class Config(object):
             #if mentions specified, check if exists in the comments
             if 'mentions' in item:
                 found = False
-                if comment is not None:
+                if metadata['comment'] is not None:
                     for mentions in item['mentions']:
-                        if mentions in comment:
+                        if mentions in metadata['comment']:
+                            found = True
+                            break
+                if not found:
+                    continue
+
+            #if labels specified
+            if 'labels' in item:
+                found = False
+                if metadata['labels'] is not None:
+                    for label in item['labels']:
+                        if label in metadata['labels']:
                             found = True
                             break
                 if not found:
