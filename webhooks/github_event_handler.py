@@ -44,7 +44,13 @@ class GithubEventHandler(object):
             )
 
     @staticmethod
-    def get_metadata(event_type, payload):
+    def get_labels(pull_request):
+        if 'labels' in pull_request:
+            return ','.join(list(map((lambda label: str(label['name'])), pull_request['labels'])))
+
+        return []
+
+    def get_metadata(self, event_type, payload):
         # decode the payload
         # @see examples/*.json
         # @see https://developer.github.com/v3/activity/events/types/#pushevent
@@ -66,8 +72,11 @@ class GithubEventHandler(object):
                 'branch': payload['pull_request']['head']['ref'],
                 'commit': payload['pull_request']['head']['sha'],
                 'target_branch': payload['pull_request']['base']['ref'],
+                'state': payload['pull_request']['state'],
                 'comment': payload['pull_request']['body'],
                 'pull_num': payload['pull_request']['number'],
+                'merged': payload['pull_request']['merged'],
+                'labels': self.get_labels(payload['pull_request'])
             }
         if event_type == "pull_request_review_comment":
             meta = {
@@ -82,18 +91,34 @@ class GithubEventHandler(object):
 
         return meta
 
-    def process_github_event(self, event_type, payload):
+    def get_wrapped_event_type(self, github_event_type, metadata):
+        # Wrap Github events and make it our own
+        wrapped_event_type = github_event_type
+        wrapped_event_matched = False
+
+        if github_event_type == 'pull_request' and metadata['state'] == 'closed' and metadata['merged'] is True:
+            wrapped_event_matched = True
+            wrapped_event_type = 'pull_request_merged'
+
+        if wrapped_event_matched:
+            self._logger.info("Wrapped event matched: %s", wrapped_event_type)
+        return wrapped_event_type
+
+    def process_github_event(self, github_event_type, payload):
         # delete branch events are missing crucial information, skip throwing an error in such cases
         if payload.get('deleted') is True:
             return 0
 
-        meta = self.get_metadata(event_type, payload)
-        job_param_keys = 'repo branch commit author email pull_num'.split(' ')
+        meta = self.get_metadata(github_event_type, payload)
+
+        job_param_keys = 'repo branch commit author email pull_num labels'.split(' ')
 
         self._logger.info("Event received: %s", json.dumps(meta))
 
+        wrapped_event_type = self.get_wrapped_event_type(github_event_type, meta)
+
         # try to match the push with list of rules from the config file
-        matches = self.__config.get_matches(meta['repo'], meta['branch'], meta['target_branch'], event_type, meta.get('comment'))
+        matches = self.__config.get_matches(wrapped_event_type, meta)
 
         job_default_params = dict([
             (k, v.encode('utf-8') if isinstance(v, basestring) else v)
