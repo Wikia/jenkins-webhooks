@@ -58,6 +58,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
 
             handler.process_github_event('pull_request', payload)
             expected_params = {
+                'action': 'opened',
                 'repo': 'Wikia/sparrow',
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
@@ -73,6 +74,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
 
             handler.process_github_event('pull_request_review_comment', payload)
             expected_params = {
+                'action': 'created',
                 'repo': 'Wikia/sparrow',
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
@@ -120,6 +122,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
 
             handler.process_github_event('pull_request', payload)
             expected_params = {
+                'action': 'closed',
                 'repo': 'Wikia/ad-engine',
                 'branch': 'ADEN-6924',
                 'commit': 'e8f4b7c5a2c40fe14513ce27cc013cd7f779f9cc',
