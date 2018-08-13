@@ -12,6 +12,11 @@ class ConfigTestClass(unittest.TestCase):
         Setup test cases
         """
         self.hostname = 'http://example.com'
+        self.jenkins = {
+                           'url': self.hostname,
+                           'user': 'dummy',
+                           'pass': 'dummy_pass'
+                       }
         self.repos = [
             {
                 # 0
@@ -282,7 +287,7 @@ class ConfigTestClass(unittest.TestCase):
         ]
 
         config = Config({
-            'jenkins': None,
+            'jenkins': self.jenkins,
             'repos': self.repos
         })
 
@@ -293,7 +298,7 @@ class ConfigTestClass(unittest.TestCase):
         """
         Test config.match method
         """
-        matches = config.get_matches(item['repo'], item['branch'], item['target_branch'], item.get('event_type'), item.get('comment'))
+        matches = config.get_matches(item.get('event_type'), {'repo': item['repo'], 'branch': item['branch'], 'target_branch': item['target_branch'], 'comment': item.get('comment')})
         expected = item['index']
         if expected is None:
             expected = []
