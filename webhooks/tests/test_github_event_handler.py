@@ -17,7 +17,10 @@ class GithubEventHandlerTestClass(unittest.TestCase):
         Setup test cases
         """
         self.config = {
-            'jenkins': 'test-host',
+            'jenkins': {
+                'url': 'http://google.com',
+                'user': 'dummy',
+                'pass': 'dummy_pass'},
             'repos': [
                 {
                     'repo': 'Wikia/sparrow',
@@ -39,8 +42,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                     }
                 },
                 {
-                    'repo': 'Wikia/aden',
-                    'events': ['pull_request'],
+                    'repo': 'Wikia/ad-engine',
+                    'events': ['pull_request_merged'],
                     'labels': ['Major change'],
                     'jobs': ['aden-job']
                 },
@@ -61,7 +64,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 'repo': 'Wikia/sparrow',
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
-                'pull_num': 31
+                'pull_num': 31,
+                'labels': []
             }
             jenkins_mock.build_job.assert_called_once_with('job5', expected_params)
 
@@ -76,7 +80,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 'repo': 'Wikia/sparrow',
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
-                'pull_num': 31
+                'pull_num': 31,
             }
             jenkins_mock.build_job.assert_called_once_with('job5', expected_params)
 
@@ -108,7 +112,8 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 'branch': 'test-branch',
                 'commit': 'f96bc53e42b40dbbd0ceb19b68a3365e7a66f223',
                 'pull_num': 31,
-                'silent': 'true'
+                'silent': 'true',
+                'labels': []
             }
             jenkins_mock.build_job.assert_called_once_with('job4', expected_params)
 
@@ -124,6 +129,7 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 'branch': 'ADEN-6924',
                 'commit': 'e8f4b7c5a2c40fe14513ce27cc013cd7f779f9cc',
                 'pull_num': 120,
-                'labels': ['Major change']
+                'labels': 'Major change,Foo'
             }
+            jenkins_mock.assert_not_called()
             jenkins_mock.build_job.assert_called_once_with('aden-job', expected_params)
