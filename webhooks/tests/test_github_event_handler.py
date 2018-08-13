@@ -47,6 +47,12 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                     'labels': ['Major change'],
                     'jobs': ['aden-job']
                 },
+                {
+                    'repo': 'Wikia/ad-engine',
+                    'events': ['pull_request_merged'],
+                    'jobs': ['aden-action-job'],
+                    'actions': ['unlabeled']
+                },
             ]
         }
 
@@ -117,22 +123,21 @@ class GithubEventHandlerTestClass(unittest.TestCase):
             }
             jenkins_mock.build_job.assert_called_once_with('job4', expected_params)
 
-    def test_pull_request_merged_labels(self):
+    def test_pull_request_with_action(self):
         jenkins_mock = mock.MagicMock()
         handler = GithubEventHandler(Config(self.config), jenkins_mock)
-        with self.__fixture('pull_request_merged.json') as fp:
+        with self.__fixture('pull_request_with_action.json') as fp:
             payload = json.load(fp)
 
             handler.process_github_event('pull_request', payload)
             expected_params = {
-                'action': 'closed',
                 'repo': 'Wikia/ad-engine',
                 'branch': 'ADEN-6924',
                 'commit': 'e8f4b7c5a2c40fe14513ce27cc013cd7f779f9cc',
-                'pull_num': 120,
-                'labels': 'Major change,Foo'
+                'pull_num': 122,
+                'labels': 'Any Label'
             }
-            jenkins_mock.build_job.assert_called_once_with('aden-job', expected_params)
+            jenkins_mock.build_job.assert_called_once_with('aden-action-job', expected_params)
 
     def test_pull_request_merged_labels(self):
         jenkins_mock = mock.MagicMock()
