@@ -131,5 +131,4 @@ class GithubEventHandlerTestClass(unittest.TestCase):
                 'pull_num': 120,
                 'labels': 'Major change,Foo'
             }
-            jenkins_mock.assert_not_called()
             jenkins_mock.build_job.assert_called_once_with('aden-job', expected_params)
