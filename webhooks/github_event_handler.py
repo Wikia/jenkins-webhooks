@@ -67,6 +67,7 @@ class GithubEventHandler(object):
             }
         if event_type == "pull_request":
             meta = {
+                'action': payload['action'],
                 'owner': payload['repository']['owner'].get('name'),
                 'repo': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],
@@ -80,6 +81,7 @@ class GithubEventHandler(object):
             }
         if event_type == "pull_request_review_comment":
             meta = {
+                'action': payload['action'],
                 'owner': payload['repository']['owner'].get('name'),
                 'repo': payload['repository']['full_name'],
                 'branch': payload['pull_request']['head']['ref'],

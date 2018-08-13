@@ -101,6 +101,16 @@ class Config(object):
                 if not found:
                     continue
 
+            #if action specified
+            if 'actions' in item:
+                found = False
+                for action in item['actions']:
+                    if action == metadata['action']:
+                        found = True
+                        break
+                if not found:
+                    continue
+
             # match for branch
             if 'branches' in item:
                 if not self.glob_list(item['branches']).match(branch):

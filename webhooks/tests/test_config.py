@@ -119,6 +119,20 @@ class ConfigTestClass(unittest.TestCase):
                 'target_branches': ['exact?'],
                 'jobs': ['job13']
             },
+            {
+                # 14
+                'repo': 'foo/repo-with-actions',
+                'events': ['pull_request'],
+                'jobs': ['any-job'],
+                'actions': ['opened']
+            },
+            {
+                # 15
+                'repo': 'foo/repo-with-actions',
+                'events': ['pull_request'],
+                'jobs': ['any-job'],
+                'actions': ['opened', 'unlabeled']
+            }
         ]
 
     def test_jenkins_host(self):
@@ -140,6 +154,30 @@ class ConfigTestClass(unittest.TestCase):
         Data provider for config.match method test
         """
         cases = [
+            {
+                'repo': 'foo/repo-with-actions',
+                'branch': 'any-branch',
+                'target_branch': 'any-target-branch',
+                'event_type': 'pull_request',
+                'index': [14, 15],
+                'action': 'opened'
+            },
+            {
+                'repo': 'foo/repo-with-actions',
+                'branch': 'any-branch',
+                'target_branch': 'any-target-branch',
+                'event_type': 'pull_request',
+                'index': 15,
+                'action': 'unlabeled'
+            },
+            {
+                'repo': 'foo/repo-with-actions',
+                'branch': 'any-branch',
+                'target_branch': 'any-target-branch',
+                'event_type': 'pull_request',
+                'index': [],
+                'action': 'any-un-matched-action'
+            },
             {
                 'repo': 'foo/bar',
                 'branch': 'tests',
@@ -298,7 +336,16 @@ class ConfigTestClass(unittest.TestCase):
         """
         Test config.match method
         """
-        matches = config.get_matches(item.get('event_type'), {'repo': item['repo'], 'branch': item['branch'], 'target_branch': item['target_branch'], 'comment': item.get('comment')})
+        matches = config.get_matches(
+            item.get('event_type'),
+            {
+                'repo': item['repo'],
+                'branch': item['branch'],
+                'target_branch': item['target_branch'],
+                'comment': item.get('comment'),
+                'action': item.get('action')
+            }
+        )
         expected = item['index']
         if expected is None:
             expected = []
