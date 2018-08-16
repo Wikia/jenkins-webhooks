@@ -144,7 +144,10 @@ class GithubEventHandler(object):
 
                         # prevent "BadParams: This job does not support parameters"
                         job = self.__jenkins.jobs[job_name]
-                        self.__jenkins.build_job(job_name, job_params if job.has_params() else None)
+                        try:
+                            self.__jenkins.build_job(job_name, job_params if job.has_params() else None)
+                        except ConnectionError:
+                            self.__jenkins.build_job(job_name, job_params if job.has_params() else None)
 
                         self._logger.info("Run of %s job scheduled", job_name)
 
