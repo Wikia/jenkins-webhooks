@@ -15,7 +15,7 @@ setup(
     author_email='macbre@wikia-inc.com',
     packages=['webhooks'],
     install_requires=[
-        'Flask==0.10.1',
+        'Flask==0.12.3',
         'jenkinsapi==0.3.6',
         'pytest==2.6.0',
         'pyyaml==3.11',
