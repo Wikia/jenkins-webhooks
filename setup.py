@@ -15,14 +15,14 @@ setup(
     author_email='macbre@wikia-inc.com',
     packages=['webhooks'],
     install_requires=[
-        'Flask==0.10.1',
+        'Flask==1.0.2',
         'jenkinsapi==0.3.6',
         'pytest==2.6.0',
-        'pyyaml==3.11',
+        'pyyaml==3.13',
         'mock==1.0.1',
         'gunicorn==19.5.0',
-        'gevent==1.0.2',
-        'greenlet==0.4.9'
+        'gevent==1.3.7',
+        'greenlet==0.4.15'
     ],
     include_package_data=True,
     entry_points={
