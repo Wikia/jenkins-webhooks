@@ -3,9 +3,14 @@ jenkins-webhooks
 
 Flask app for triggering Jenkins builds by GitHub webhooks
 
+# DEPRECATION
+
+This solution has been deprecated in favor of [github-webhooks-proxy](https://wikia-inc.atlassian.net/wiki/spaces/PLAT/pages/493978068/Github+Webhooks+Proxy)
+
 ## Links
 
-* [Internal docs](https://one.wikia-inc.com/wiki/QA/Jenkins_for_pull_requests)
+* [Internal docs](https://wikia-inc.atlassian.net/wiki/spaces/QMT/pages/62489571/Jenkins+for+pull+requests)
+* [Fandom configuration file](https://github.com/Wikia/chef-repo/blob/master/cookbooks/jenkins-webhooks-18/templates/default/config.yaml.erb)
 
 ## Installation
 
